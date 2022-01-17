@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "demo-angular": "apps/demo-angular",
+    "demo-react": "apps/demo-react",
+    "demo-web": "apps/demo-web",
+    "ui-payment-btn": "libs/ui/payment-btn"
+  }
+}

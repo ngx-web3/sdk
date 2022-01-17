@@ -1,0 +1,33 @@
+{
+  "root": "libs/ui/payment-btn",
+  "sourceRoot": "libs/ui/payment-btn/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ui-payment-btn",
+        "main": "libs/ui/payment-btn/src/index.ts",
+        "tsConfig": "libs/ui/payment-btn/tsconfig.lib.json",
+        "assets": ["libs/ui/payment-btn/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/payment-btn/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/payment-btn"],
+      "options": {
+        "jestConfig": "libs/ui/payment-btn/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

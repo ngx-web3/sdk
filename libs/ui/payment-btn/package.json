@@ -1,0 +1,15 @@
+{
+  "name": "@ngx-web3/ui-payment-btn",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.6.0",
+    "assert": "^2.0.0",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "web3": "^1.6.1"
+  }
+}
