@@ -1,17 +1,6 @@
-import Web3 from 'web3';
+import { NgxWeb3Service } from '@ngx-web3/sdk';
 
-export const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error'];
-export const CHAIN_NETWORKS = [
-  {name: 'bsc', symbol: 'BNB', type: [
-    {name: 'mainnet', id: 38},
-    {name: 'testnet', id: 61},
-  ]},
-  {name: 'eth', symbol: 'ETH', type: [
-    {name: 'mainnet', id: 1},
-    {name: 'ropsten', id: 3},
-    {name: 'rinkeby', id: 4},
-  ]}
-];
+const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error'];
 
 export class NgxWeb3UiPaymentButton extends HTMLElement {
 
@@ -21,7 +10,8 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   protected _chainid?: number;
   protected _to!: string;
   protected _displayAlert!: boolean;
-  private _web3!: Web3;
+  private _web3Service!: NgxWeb3Service;
+
   public static observedAttributes = ATTR;
 
   constructor() {
@@ -82,9 +72,18 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     if (!button) {
       return;
     }
-    button.addEventListener('click', (e) => {
+    button.addEventListener('click', async (e) => {
       e.preventDefault();
-      this._requestPayment().catch(err => this._handleError(err, false, true));
+      // disable btn
+      button.setAttribute('disabled', 'true');
+      // request service
+      const tx = await this._requestPayment().catch(err => this._handleError(err, false, true));
+      // enable btn
+      button.removeAttribute('disabled');
+      // dispatch event with transaction object
+      if (tx) {
+        this._dispatchEvent('success', {tx});
+      }
     });
   }
 
@@ -132,91 +131,23 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       this._handleError(Error('Ethereum is not supported'), false, true);
     }
     if ((window as any)._nxweb3) {
-      this._web3 = (window as any)._nxweb3;
+      this._web3Service = (window as any)._nxweb3;
       return;
     }
     console.log('[INFO] Initializing web3...');
-    const web3 = new Web3();
-    web3.setProvider((window as any).ethereum);
-    this._web3 = web3;
+    const web3 = new NgxWeb3Service((window as any).ethereum);
+    this._web3Service = web3;
     (window as any)._nxweb3 = web3;
     console.log('[INFO] Web3 initialized');
   }
-
-  protected async _checkNetwork(): Promise<void> {
-    // extract chain object from CHAIN_IDS array object $
-    const chain = CHAIN_NETWORKS.find(c => c.symbol === this._symbol);
-    if (!chain) {
-      this._handleError(new Error('Unknown chain network'), false, true);
-      return;
-    }
-    // extract network object from chain object if chainid
-    // use ETH mainnet as default if no chainid is provided
-    const {id = null} = chain.type.find(n => n.id === this._chainid) 
-      || chain.type.find(n => n.name === 'mainnet')
-      ||{};
-    // handle unexisting listed network
-    if (!id) {
-      this._handleError(new Error('Unknown network'), false, true);
-      return;
-    }    
-    // set chainid for transaction object request
-    this._chainid = id;
-    // get current network
-    const chainid = await this._web3.eth.getChainId();
-    // check if network is correct
-    if (chainid !== this._chainid) {
-      // switch network to correct one
-      await (window as any).ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${this._chainid}` }], // chainId must be in hexadecimal numbers
-      });
-    }
-  }
-
+  
   protected async _requestPayment() {
-    console.log('[INFO] Making payment...');
-    if (!this._to) {
-      alert('No payment destination address provided');
-      this._handleError(new Error('No payment destination address provided'), false, true);
-      return;
-    }
-    if (!this._web3) {
-      this._handleError(new Error('Web3 is not initialized'), false, true);
-      return;
-    }
-    // switch correct network
-    const error: Error = await this._checkNetwork().catch(err => err);
-    if (error) {
-      this._handleError(error, false, true);
-      return;
-    }
-    // check if user is logged in to MetaMask
-    const accounts =  await this._web3.eth.getAccounts();
-    if (!accounts || !accounts.length) {
-      this._handleError(new Error('User is not logged in to MetaMask'), false, true);
-      return;
-    }
-    // check if same from and destination address
-    if (accounts[0] === this._to) {
-      this._handleError(new Error('Payment address must be different to destination address'));
-      return;
-    }
-    // check if user has enough funds
-    const balance = await this._web3.eth.getBalance(accounts[0]);
-    if (balance && parseFloat(balance) < parseFloat(this._amount)) {
-      this._handleError(new Error('User does not have enough funds'), false, true);
-      return;
-    }
-    // send the payment transaction
-    const tx = await this._web3.eth.sendTransaction({
-      from: accounts[0],
+    const tx = await this._web3Service.requestPayment({
       to: this._to,
-      value: this._web3.utils.toWei(this._amount, 'ether'),
-      chainId: this._chainid
-    });
-    // show transaction hash
-    console.log('Transaction sent: ', tx);
+      symbol: this._symbol,
+      chainId: this._chainid,
+      amount:this._amount
+    })
     return tx;
   }
 

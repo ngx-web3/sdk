@@ -1,9 +1,11 @@
 {
   "version": 2,
   "projects": {
+    "core": "libs/core",
     "demo-angular": "apps/demo-angular",
     "demo-react": "apps/demo-react",
     "demo-web": "apps/demo-web",
+    "sdk": "libs/sdk",
     "ui-payment-btn": "libs/ui/payment-btn"
   }
 }
