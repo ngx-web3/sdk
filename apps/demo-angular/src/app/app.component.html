@@ -1,10 +1,24 @@
-<p>
-  Price: {{amount}} {{symbol}} 
-</p>
+<div>
+  <h2>Wallet Transaction</h2>
+  <p>
+    Price: {{amount}} {{symbol}} 
+  </p>
+  
+  <ngxweb3-payment-btn
+      chainid="61"
+      to="0xf9Fb1f793051fab79bc5C2AE3Fd31dD92590aEfc"
+      display-error="true"
+      [attr.symbol]="symbol"
+      [attr.amount]="amount"></ngxweb3-payment-btn>
+</div>
 
-<ngxweb3-payment-btn
-    chainid="61"
-    to="0xf9Fb1f793051fab79bc5C2AE3Fd31dD92590aEfc"
-    display-error="true"
-    [attr.symbol]="symbol"
-    [attr.amount]="amount"></ngxweb3-payment-btn>
+
+<div>
+  <h2>IPFS Storage</h2>
+  <input #inputElement hidden="true" multiple="true" title="file" type="file" id="file" (change)="storeFile(inputElement)"/>
+  <button type="button" (click)="inputElement.click()">select files</button>
+  <hr/>
+  <input #inputSearch type="text" title="search" placeholder="search wiith CID" /> 
+  <button type="button" (click)="findFile(inputSearch.value)">search</button>
+</div>
+

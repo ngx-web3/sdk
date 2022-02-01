@@ -50,17 +50,12 @@ import 'zone.js'; // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
-
-//  import { Buffer } from 'buffer';
-//  if ((window as any).global === undefined) {
-//    console.log('window.global is undefined');
    
-//    (window as any).global = window;
-//    (global).Buffer = Buffer;
-//    global.process = {
-//        env: { DEBUG: undefined },
-//        version: '',
-//        nextTick: require('next-tick')
-//    } as any;
-//  }
- 
+if (window && (window as any).global === undefined) {
+  console.log('window.global is undefined');
+  (window as any).global = window;
+  global.process = {
+      env: { DEBUG: undefined },
+      version: '',
+  } as any;
+}

@@ -1,6 +1,8 @@
-import { NgxWeb3Service } from '@ngx-web3/sdk';
+import { EtherumWalletProvider, WalletService } from '@ngx-web3/sdk';
+import { defineCustomElement } from '@ionic/core/components/ion-button';
+import { initialize } from "@ionic/core/components";
 
-const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error'];
+const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error', 'is-style-disabled'];
 
 export class NgxWeb3UiPaymentButton extends HTMLElement {
 
@@ -10,20 +12,22 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   protected _chainid?: number;
   protected _to!: string;
   protected _displayAlert!: boolean;
-  private _web3Service!: NgxWeb3Service;
+  protected _isStyleDisabled!: boolean;
+  private _web3Service!: WalletService;
 
   public static observedAttributes = ATTR;
 
   constructor() {
     super();
-    this.attachShadow({mode: 'open'});
-    this._addStyle();
-    this.render();
+    defineCustomElement();
+    initialize();
     this._initWeb3();
   }
   
   connectedCallback() {
     console.log('[INFO] Appended and connected to document');
+    // render the UI only one time on first load
+    this.render();
   }
 
   disconnectedCallback() {
@@ -42,33 +46,32 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       else if (name === 'display-error') {
         this._displayAlert = true;
       } 
+      // enforce type for is-style-disabled
+      else if (name === 'is-style-disabled') {
+        this._isStyleDisabled = true;
+      } 
       // and for others
       else {
         (this as any)['_' + name] = value;
       }
-      // re-render the UI
-      this.render();
+      // re-render the UI only if text change
+      if (name === 'text' && old !== value) {
+        console.log('[INFO] Rendering UI');
+        this.render();
+      }
     } else {
       console.error('[ERROR] Unknown attribute: ', name);
     }
   }
 
   render() {
-    if (!this.shadowRoot) {
-      return;
-    }
-    // update the UI
-    this.shadowRoot.innerHTML = `
-      <button>${this._text}</button>
-    `;
+    console.log('[INFO] Rendering UI');
+    this.innerHTML = `<ion-button>${this._text}</ion-button>`;
     this._addEvents();
   }
 
   protected _addEvents() {
-    if (!this.shadowRoot) {
-      return;
-    }
-    const button = this.shadowRoot.querySelector('button');
+    const button = this.querySelector('ion-button');
     if (!button) {
       return;
     }
@@ -85,20 +88,6 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
         this._dispatchEvent('success', {tx});
       }
     });
-  }
-
-  protected _addStyle() {
-    if (!this.shadowRoot) {
-      return;
-    }
-    const style = document.createElement('style');
-    style.textContent = `
-      :host {
-        display: block;
-        position: inline-block;
-      }
-    `;
-    this.shadowRoot.appendChild(style);
   }
 
   protected _dispatchEvent(type: string, action: any) {
@@ -126,16 +115,17 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   }
 
   protected async _initWeb3() {
-    if (!(window as any).ethereum) {
-      this._dispatchEvent('error', {error: new Error('Ethereum is not supported')});
-      this._handleError(Error('Ethereum is not supported'), false, true);
-    }
+    // check if web3 is already injected and instantiated
     if ((window as any)._nxweb3) {
       this._web3Service = (window as any)._nxweb3;
       return;
     }
     console.log('[INFO] Initializing web3...');
-    const web3 = new NgxWeb3Service((window as any).ethereum);
+    // choose and init provider
+    const provider = new EtherumWalletProvider((window as any).ethereum);
+    // init wallet service with provider
+    const web3 = new WalletService(provider);
+    // save web3 service to window to prevent multiple init
     this._web3Service = web3;
     (window as any)._nxweb3 = web3;
     console.log('[INFO] Web3 initialized');

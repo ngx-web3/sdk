@@ -9,3 +9,12 @@ export interface NgxWeb3RequestPayment {
   }): Promise<any>;
 
 }
+
+export interface NgxWeb3StorageInterface {
+
+  save(data?: File[] | undefined): Promise<string>;
+  find(cid: string): Promise<Partial<File & {
+    ipfsPath: string;
+  }>[]>;
+
+}

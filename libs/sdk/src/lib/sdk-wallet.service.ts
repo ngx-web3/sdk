@@ -1,12 +1,11 @@
-import { ethers } from "ethers";
-import { NgxWeb3CoreService } from "@ngx-web3/core";
+import { NgxWeb3WalletProviderInterface, NgxWeb3WalletService } from "@ngx-web3/core";
+import { NgxWeb3RequestPayment } from "./sdk-web3.interface";
+import { toWei } from "./sdk-web3.utils";
 
-import { NgxWeb3RequestPayment, toWei } from "..";
+export class WalletService extends NgxWeb3WalletService implements NgxWeb3RequestPayment {
 
-export class NgxWeb3Service extends NgxWeb3CoreService implements NgxWeb3RequestPayment {
-
-  constructor(eth: ethers.providers.ExternalProvider, context: Window = window) {
-    super(eth, context);
+  constructor(provider: NgxWeb3WalletProviderInterface, context: Window = window) {
+    super(provider, context);
   }
   
   async requestPayment({to, symbol, chainId, amount}: {
@@ -19,9 +18,9 @@ export class NgxWeb3Service extends NgxWeb3CoreService implements NgxWeb3Request
       throw new Error('No payment destination address provided');
     }
     // switch correct network
-    await this._checkNetwork(symbol, chainId);
+    await this._provider.checkNetwork(symbol, chainId);
     // check if user is logged in to MetaMask
-    const accounts =  await this._getAccounts();
+    const accounts =  await this._provider.getAccounts();
     if (!accounts || !accounts.length) {
       throw new Error('User is not logged in to MetaMask');
     }
@@ -30,7 +29,7 @@ export class NgxWeb3Service extends NgxWeb3CoreService implements NgxWeb3Request
       throw new Error('Payment address must be different to destination address');
     }
     // check if user has enough funds
-    const balance = await this._getBalance(accounts[0]);
+    const balance = await this._provider.getBalance(accounts[0]);
     if (balance && parseFloat(balance) < parseFloat(amount)) {
       throw new Error('User does not have enough funds');
     }
@@ -42,7 +41,7 @@ export class NgxWeb3Service extends NgxWeb3CoreService implements NgxWeb3Request
       chainId
     }
     console.log('[INFO] Sending payment transaction...', data);
-    const tx = await this._sendTransaction(data);
+    const tx = await this._provider.sendTransaction(data);
     // show transaction hash
     return tx;
   }

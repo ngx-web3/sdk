@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  
+  // use Ionic variables to customize NgxUiElements
+  --ion-color-primary: rgb(0, 145, 255);
+}

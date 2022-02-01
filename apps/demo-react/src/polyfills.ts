@@ -6,16 +6,11 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { Buffer } from 'buffer';
-
-if ((window as any).global === undefined) {
+if (window && (window as any).global === undefined) {
   console.log('window.global is undefined');
-  
   (window as any).global = window;
-  global.Buffer = Buffer;
   global.process = {
       env: { DEBUG: undefined },
       version: '',
-      nextTick: require('next-tick')
   } as any;
 }
