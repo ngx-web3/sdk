@@ -1,13 +1,18 @@
 import { EtherumWalletProvider, WalletService } from '@ngx-web3/sdk';
-import { defineCustomElement } from '@ionic/core/components/ion-button';
+import { defineCustomElement as defineIonButton} from '@ionic/core/components/ion-button';
+import { defineCustomElement as defineIonIcon } from 'ionicons/components/ion-icon';
+import { logoBitcoin } from 'ionicons/icons';
+import { addIcons, setAssetPath } from 'ionicons/components';
 import { initialize } from "@ionic/core/components";
+// here import svg from noode_modules/cryptocurrency-icons/svg/white/bnb.svg
+const url = '';
 
 const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error', 'is-style-disabled'];
 
 export class NgxWeb3UiPaymentButton extends HTMLElement {
 
   protected _amount = '1';
-  protected _text = 'Pay with Metamask';
+  protected _text = 'Pay with crypto';
   protected _symbol = 'ETH';
   protected _chainid?: number;
   protected _to!: string;
@@ -19,7 +24,9 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
 
   constructor() {
     super();
-    defineCustomElement();
+    defineIonButton();
+    defineIonIcon();
+    addIcons({'logo-bitcoin': logoBitcoin});
     initialize();
     this._initWeb3();
   }
@@ -66,7 +73,12 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
 
   render() {
     console.log('[INFO] Rendering UI');
-    this.innerHTML = `<ion-button>${this._text}</ion-button>`;
+    this.innerHTML = `
+      <ion-button>
+        <ion-icon slot="start" name="logo-bitcoin"></ion-icon>
+        ${this._text}
+      </ion-button>
+    `;
     this._addEvents();
   }
 
