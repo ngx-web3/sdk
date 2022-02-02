@@ -4,8 +4,8 @@ import { toWei } from "./sdk-web3.utils";
 
 export class WalletService extends NgxWeb3WalletService implements NgxWeb3RequestPayment {
 
-  constructor(provider: NgxWeb3WalletProviderInterface, context: Window = window) {
-    super(provider, context);
+  constructor(provider: NgxWeb3WalletProviderInterface) {
+    super(provider);
   }
   
   async requestPayment({to, symbol, chainId, amount}: {

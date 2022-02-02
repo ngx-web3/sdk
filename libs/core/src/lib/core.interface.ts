@@ -29,6 +29,10 @@ export interface NgxWeb3ProviderInterface extends EtherumWeb3Interface {
 
 export interface NgxWeb3WalletProviderInterface {
 
+  isConnected(): Promise<boolean>;
+
+  connect(): Promise<void>;
+
   getChainId(
     callback?: ((error: Error, version: number) => void) | undefined
   ): Promise<number>;

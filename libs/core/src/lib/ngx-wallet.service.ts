@@ -1,6 +1,4 @@
 
-import { ethers } from "ethers";
-import { Connection as solanaConnection, clusterApiUrl } from '@solana/web3.js';
 import { NgxWeb3WalletProviderInterface } from "..";
 
 
@@ -19,20 +17,21 @@ export const CHAIN_NETWORKS = [
 export class NgxWeb3WalletService {
 
   protected _provider!: NgxWeb3WalletProviderInterface;
-  private _context!: Window;
-  public get context(): any {
-    return this._context;
-  }
 
-  constructor(provider: NgxWeb3WalletProviderInterface, context: Window = window) {
+  constructor(provider: NgxWeb3WalletProviderInterface) {
     if (!provider) {
       throw new Error('Web3 is not supported. Not provider provided');
     }
-    if (!context) {
-      throw new Error('Web3 is not supported. No context provided');
-    };
     this._provider = provider;
-    this._context = context;
+  }
+
+  async isConnected() {
+    const isConnected = this._provider?.isConnected() ?? false;
+    return isConnected;
+  }
+
+  async connect() {
+    await this._provider?.connect();
   }
 
 }

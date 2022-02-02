@@ -129,6 +129,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     this._web3Service = web3;
     (window as any)._nxweb3 = web3;
     console.log('[INFO] Web3 initialized');
+    console.log('[INFO] Wallet connected status: ',  await this._web3Service.isConnected());
   }
   
   protected async _requestPayment() {

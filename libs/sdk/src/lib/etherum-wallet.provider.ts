@@ -6,10 +6,34 @@ export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
   private _walletProvider!: ethers.providers.Web3Provider;
   private _web3Provider!: ethers.providers.ExternalProvider;
 
-  constructor(public readonly provider: ethers.providers.ExternalProvider) {
+  constructor(public readonly provider: ethers.providers.ExternalProvider, context?: Window) {
     this._web3Provider = provider;
     this._walletProvider = new ethers.providers.Web3Provider(provider);
-    this._listenEvents();
+    this._listenEvents(context||window);
+  }
+
+  async isConnected(): Promise<boolean> {
+    if (!this._walletProvider?.send) {
+      return false;
+    }
+    return this._walletProvider
+      .listAccounts()
+      .then((res) => res.length > 0 
+        ? true 
+        : false
+      )
+      .catch(() => false);
+      // .send("eth_accounts", [])
+      // .then(() => true)
+      // .catch(() => false);
+  }
+
+  async connect(): Promise<void> {
+    await this._walletProvider
+      ?.send("eth_accounts", [])
+      ?.then(() => true)
+      ?.catch(() => false);
+    await this.isConnected();
   }
 
   async checkNetwork(symbol?: string, chainid?: number): Promise<void> {
