@@ -9,6 +9,9 @@
       "options": {
         "outputPath": "dist/libs/ui-payment-btn",
         "main": "libs/ui/payment-btn/src/index.ts",
+        "polyfills": [
+          "libs/ui/payment-btn/polyfills.ts"
+        ],
         "packageJson": "libs/ui/payment-btn/package.json",
         "tsConfig": "libs/ui/payment-btn/tsconfig.lib.json",
         "assets": [

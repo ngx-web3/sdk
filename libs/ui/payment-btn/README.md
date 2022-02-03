@@ -87,7 +87,14 @@ customElements.define('ngx-web3-root', AppElement);
 
 **Polyfill**
 ```ts
-  import '@ngx-web3/ui-payment-btn/polyfill';
+if (window && (window as any).global === undefined) {
+  console.log('window.global is undefined');
+  (window as any).global = window;
+  global.process = {
+      env: { DEBUG: undefined },
+      version: '',
+  } as any;
+}
 ```
 
 
