@@ -9,7 +9,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent {
   title = 'demo-angular';
-  amount = 0.01;
+  amount = 250;
   symbol = 'BNB';
 
   async storeFile(input: HTMLInputElement) {

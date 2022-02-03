@@ -4,13 +4,21 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
+      "executor": "@nrwl/node:package",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/ui-payment-btn",
         "main": "libs/ui/payment-btn/src/index.ts",
+        "packageJson": "libs/ui/payment-btn/package.json",
         "tsConfig": "libs/ui/payment-btn/tsconfig.lib.json",
-        "assets": ["libs/ui/payment-btn/*.md"]
+        "assets": [
+          "libs/ui/payment-btn/*.md",
+          {
+            "input": "libs/ui/payment-btn/src/assets",
+            "glob": "**/*",
+            "output": "assets/payment-btn"
+          }
+        ]
       }
     },
     "lint": {

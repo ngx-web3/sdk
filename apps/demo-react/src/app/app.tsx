@@ -1,16 +1,17 @@
 import '@ngx-web3/ui-payment-btn';
 
 export function App() {
-
-  const amount = 0.01;
+  const chainid = '61';
+  const amount = 250;
   return (
     <>
-      <p>Price: {amount} BNB</p>
+      <p>Price: $ {amount} USD</p>
       <ngxweb3-payment-btn
+          chainid={chainid}
           symbol="BNB"
-          chainid="61"
-          to="0x..."
-          amount="{amount}"></ngxweb3-payment-btn>
+          to="Ox..."
+          display-error={true}
+          amount={amount}></ngxweb3-payment-btn>
       <div />
     </>
   );

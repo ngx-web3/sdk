@@ -1,14 +1,15 @@
 import { CHAIN_NETWORKS, NgxWeb3WalletProviderInterface } from "@ngx-web3/core";
 import { ethers } from "ethers";
+import { toWei } from "./sdk-web3.utils";
 
 export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
 
   private _walletProvider!: ethers.providers.Web3Provider;
   private _web3Provider!: ethers.providers.ExternalProvider;
-
+  
   constructor(public readonly provider: ethers.providers.ExternalProvider, context?: Window) {
     this._web3Provider = provider;
-    this._walletProvider = new ethers.providers.Web3Provider(provider);
+    this._walletProvider = new ethers.providers.Web3Provider(provider, 'any');
     this._listenEvents(context||window);
   }
 
@@ -45,8 +46,8 @@ export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
     // extract network object from chain object if chainid
     // use ETH mainnet as default if no chainid is provided
     const {id = null} = chain.type.find(n => n.id === chainid) 
-      || chain.type.find(n => n.name === 'mainnet')
-      ||{};
+      || chain.type.find(n => n.name.includes('mainnet'))
+      || {};
     // handle unexisting listed network
     if (!id) {
       throw new Error('Unknown network')
@@ -79,9 +80,15 @@ export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
     return network.chainId;
   }
 
-  async sendTransaction<T>(transactionConfig: T, callback?: (error: Error|null, hash: string) => void): Promise<any> {
+  async sendTransaction<T>(transactionConfig: ethers.utils.Deferrable<ethers.providers.TransactionRequest>, callback?: (error: Error|null, hash: string) => void): Promise<any> {
+    if (!transactionConfig.value) {
+      throw new Error('No value provided');
+    }
     const signer = this._walletProvider.getSigner();
-    const tx = await signer.sendTransaction(transactionConfig);
+    const tx = await signer.sendTransaction({
+      ...transactionConfig,
+      value: toWei(transactionConfig.value?.toString(), 'ether'),
+    });
     if (callback) {
         callback(null, tx.hash);
     }
@@ -94,12 +101,13 @@ export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
   private _listenEvents(context: Window = window) {
     // Force page refreshes on network changes
     this._walletProvider.on("network", (newNetwork, oldNetwork) => {
+      console.log("[INFO] Network changed:", newNetwork, oldNetwork);
       // When a Provider makes its initial connection, it emits a "network"
       // event with a null oldNetwork along with the newNetwork. So, if the
       // oldNetwork exists, it represents a changing network
-      if (oldNetwork) {
-          context.location.reload();
-      }
+      // if (oldNetwork) {
+      //     context.location.reload();
+      // }
     });
   }
 

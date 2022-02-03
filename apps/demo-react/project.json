@@ -17,7 +17,12 @@
         "tsConfig": "apps/demo-react/tsconfig.app.json",
         "assets": [
           "apps/demo-react/src/favicon.ico",
-          "apps/demo-react/src/assets"
+          "apps/demo-react/src/assets",
+          {
+            "input": "libs/ui/payment-btn/src/assets",
+            "glob": "**/*",
+            "output": "assets/payment-btn"
+          }
         ],
         "styles": ["apps/demo-react/src/styles.scss"],
         "scripts": [],

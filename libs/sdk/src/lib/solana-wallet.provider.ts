@@ -1,5 +1,6 @@
 import { CHAIN_NETWORKS, NgxWeb3WalletProviderInterface } from "@ngx-web3/core";
-import { PublicKey, Connection, clusterApiUrl, Transaction, SystemProgram } from '@solana/web3.js';
+import { PublicKey, Connection, clusterApiUrl, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { fromUSDtoSOL, toLamports } from "..";
 
 type PhantomEvent = "disconnect" | "connect" | "accountChanged";
 
@@ -53,8 +54,8 @@ export class SolanaWalletProvider implements NgxWeb3WalletProviderInterface {
     // extract network object from chain object if chainid
     // use ETH mainnet as default if no chainid is provided
     const {id = null} = chain.type.find(n => n.id === chainid) 
-      || chain.type.find(n => n.name === 'mainnet')
-      ||{};
+      || chain.type.find(n => n.name.includes('mainnet'))
+      || {};
     // handle unexisting listed network
     if (!id) {
       throw new Error('Network is not correct. Switching to correct network');
@@ -63,14 +64,19 @@ export class SolanaWalletProvider implements NgxWeb3WalletProviderInterface {
 
   async getAccounts(callback?: (error: Error, accounts: string[]) => void): Promise<string[]> {
     const key = this._publicKey;
+    if (!key && this._web3Provider && this._web3Provider.isConnected !== true) {
+      await this._web3Provider.connect();
+    }
+    if (!key && !this._web3Provider) {
+      throw new Error('No Solana Wallet connection available');
+    }
     if (!key) {
       throw new Error('No public key available');
     }
-    return this._walletProvider
-      .getAccountInfo(key)
-      .then((account) => {
-        return account ? [account?.owner?.toString()] : [];
-      });
+    const account = await this._walletProvider.getAccountInfo(key);
+    console.log('[INFO] Solana Wallet account info:', account);
+    
+    return account ? [account?.owner?.toString()] : [];
   }
 
   async getBalance(address: string): Promise<string> {
@@ -95,7 +101,7 @@ export class SolanaWalletProvider implements NgxWeb3WalletProviderInterface {
       SystemProgram.transfer({
         fromPubkey: this._publicKey,
         toPubkey: new PublicKey(transactionConfig.destAddr),
-        lamports: transactionConfig.lamports,
+        lamports: toLamports(transactionConfig?.value?.toString())
       })
     );
     this._web3Provider.signTransaction(tr);

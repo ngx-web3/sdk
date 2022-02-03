@@ -4,12 +4,12 @@
 
 ## 👀 Overview
 
-NgxWeb3 provide a collection of packages based on `web3.js` to simplify development of your dapps in Typescript, Angular, React and WebComponent.
+NgxWeb3 provide a collection of packages to simplify development of your dapps in Typescript, Angular, React and WebComponent.
 
 ## 🚀 Features
 
-- ✅ [@ngx-web3/ui-payment-btn]() - Is a UI Payment Button Component that allows your to provide a simple button to your application or website to make transaction payment with Ethereum and other ERC20 tokens. 
-- ☑️ [@ngx-web3/ui-payment-modal]() - Is a UI Payment Modal Component that allows yous to provide a modal to your application or website, with many options and configurations to make transaction payment with Ethereum and other ERC20 tokens.
+- ✅ [@ngx-web3/ui-payment-btn](./libs/ui/payment-btn/README.md) - Is a HTML UI Crypto Payment Button Component that allows your to provide a simple button to make USD transaction payment with Ethereum (ETH), Binance (BNB) or Solana (SOL) token. It includes real-time currency conversion from USD to selected token using Coingecko API. It also includes an optiionnal UI to display the transaction status. This HTML component is a great way to provide a crypto payment button to your application or website without centralized payment provider.
+
 
 ## ⚙️ Install
 

@@ -16,7 +16,15 @@
         "main": "apps/demo-web/src/main.ts",
         "polyfills": "apps/demo-web/src/polyfills.ts",
         "tsConfig": "apps/demo-web/tsconfig.app.json",
-        "assets": ["apps/demo-web/src/favicon.ico", "apps/demo-web/src/assets"],
+        "assets": [
+          "apps/demo-web/src/favicon.ico", 
+          "apps/demo-web/src/assets",
+          {
+            "input": "libs/ui/payment-btn/src/assets",
+            "glob": "**/*",
+            "output": "assets/payment-btn"
+          }
+        ],
         "styles": ["apps/demo-web/src/styles.scss"],
         "scripts": []
       },

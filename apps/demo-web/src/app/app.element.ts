@@ -6,13 +6,14 @@ export class AppElement extends HTMLElement {
 
   connectedCallback() {
     const title = 'demo-web';
+    const amount = 250;
     this.innerHTML = `
-    <p>Price: 0.01 BNB</p>
+    <p>Price: $ ${amount} USD</p>
     <ngxweb3-payment-btn
-        symbol="BNB"
         chainid="61"
+        symbol="BNB"
         to="0x..."
-        amount="0.01"></ngxweb3-payment-btn>
+        amount="${amount}"></ngxweb3-payment-btn>
       `;
   }
 }
