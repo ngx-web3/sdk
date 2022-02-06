@@ -30,9 +30,14 @@ export class WalletService extends NgxWeb3WalletService implements NgxWeb3Reques
     await this._provider.checkNetwork(symbol, chainId);
     // check if user is logged with Crypto Wallet 
     // and request authentication if needed to extract account data
-    const accounts =  await this._provider.getAccounts();
+    let accounts =  await this._provider.getAccounts();
     if (!accounts || !accounts.length) {
-      throw new Error('User is not logged in to Crypto Wallet');
+      console.log('[INFO] User is not logged with Crypto Wallet, requesting authentication...');
+      await this._provider.connect();
+      accounts = await this._provider.getAccounts();
+      if (!accounts || !accounts.length) {
+        throw new Error('User is not logged in to Crypto Wallet');
+      }
     }
     // check if same from and destination address
     if (accounts[0] === to) {
