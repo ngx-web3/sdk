@@ -1,8 +1,10 @@
 import { EtherumWalletProvider, SolanaWalletProvider, WalletService, CHAIN_NETWORKS } from '@ngx-web3/sdk';
 import { defineCustomElement as defineIonButton} from '@ionic/core/components/ion-button';
+import { defineCustomElement as defineIonItem} from '@ionic/core/components/ion-item';
+import { defineCustomElement as defineIonLabel} from '@ionic/core/components/ion-label';
 import { defineCustomElement as defineIonSkeleton} from '@ionic/core/components/ion-skeleton-text';
 import { defineCustomElement as defineIonIcon } from 'ionicons/components/ion-icon';
-import { logoBitcoin } from 'ionicons/icons';
+import { logoBitcoin, closeCircle } from 'ionicons/icons';
 import { addIcons } from 'ionicons/components';
 import { initialize } from "@ionic/core/components";
 import { NgxWeb3WalletProviderInterface } from '@ngx-web3/core';
@@ -23,7 +25,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   protected _symbol!: string;
   protected _chainid?: number;
   protected _to!: string;
-  protected _displayAlert!: boolean;
+  protected _displayError!: boolean;
   protected _isStyleDisabled!: boolean;
   private _web3Service!: WalletService;
   private _selectedCryptoCurrency!: {displayName: string, name: string, symbol: string, type: {name: string, id: number, selected?: boolean}[]};
@@ -41,9 +43,12 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     defineIonButton();
     defineIonIcon();
     defineIonSkeleton();
+    defineIonItem();
+    defineIonLabel();
     addIcons({'logo-sol': SVG.SOL});
     addIcons({'logo-eth': SVG.ETH});
     addIcons({'logo-bnb': SVG.BNB});
+    addIcons({'close-circle': closeCircle});
     addIcons({'logo-bitcoin': logoBitcoin});
     initialize();
   }
@@ -70,7 +75,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       } 
       // enforce for display alert
       else if (name === 'display-error') {
-        this._displayAlert = true;
+        this._displayError = true;
       } 
       // enforce type for is-style-disabled
       else if (name === 'is-style-disabled') {
@@ -85,11 +90,14 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       // and atribute firstime change name is `symbol`
       if (!this._web3Service && name === 'symbol' && old === null) {
         this._initComponent()
-            .then(() => this.render())
+            .then((res) =>  res 
+              ? this.render()
+              : this._addStyle()
+            )
             .catch(err => {
-              this._handleError(err, true, true);
               // clean DOM
               this.innerHTML = ``;
+              this._handleError(err, true, true);
             });
       }      
     } else {
@@ -97,7 +105,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     }
   }
 
-  protected async _initComponent(): Promise<void> {
+  protected async _initComponent(): Promise<boolean> {
     // get network data using symbol
     const chain = CHAIN_NETWORKS.find(n => n.symbol === this._symbol);
     if (!chain) {
@@ -122,7 +130,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     }
     // set selected crypto currency
     this._selectedCryptoCurrency = chain;
-    await this._initWeb3();
+    return await this._initWeb3();
   }
 
   render() {
@@ -138,6 +146,33 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     if (this._selectedCryptoCurrency) {
       this._addEvents();
     }
+    // add style
+    this._addStyle();
+  }
+
+  protected _addStyle() {
+    if (this._isStyleDisabled === true) {
+      return;
+    }
+    // check if style is already added
+    if (this.querySelector('#ngxweb3-payment-btn')) {
+      return;
+    }
+    // add style
+    const style = document.createElement('style');
+    style.id = 'ngxweb3-payment-btn';
+    const rules = `
+      ion-item {
+        --color: #eb445a;
+        --background: transparent;
+        --padding-start: 0;
+      }
+      ion-label {
+        padding-left: 6px;
+      }
+    `;
+    style.innerHTML = rules;
+    this.appendChild(style);
   }
 
   protected _addEvents() {
@@ -147,6 +182,8 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     }
     button.addEventListener('click', async (e) => {
       e.preventDefault();
+      // remove error message if any
+      this.querySelector('#ngxweb3-error')?.remove();
       // disable btn
       button.setAttribute('disabled', 'true');
       // request service
@@ -169,6 +206,25 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     this.dispatchEvent(customEvent);
   }
 
+  protected _renderError(errorMessage: string) {
+    let elementHTML = this.querySelector('#ngxweb3-error');
+    // if not found, create it
+    if (!elementHTML) {
+      const ionButton = this.querySelector('ion-button');
+      ionButton?.insertAdjacentHTML('afterend', `<div id="ngxweb3-error"></div>`);
+      elementHTML = this.querySelector('#ngxweb3-error');
+    }
+    // display error 
+    (elementHTML||this).innerHTML = `
+      <ion-item lines="none" color="danger">
+      <ion-icon size="small" name="close-circle"></ion-icon>
+       <ion-label color="danger">
+        <small>${errorMessage}</small>
+       </ion-label>
+      </ion-item>
+    `;
+  }
+
   protected _handleError(err: Error, preventDispatch = false, preventThrow = false) {
     // always display error in console
     console.error(err);
@@ -179,25 +235,25 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     if (!preventThrow) {
       throw err;
     }
-    // display native alert
-    if (this._displayAlert) {
-      alert(err.message);
+    // display native message
+    if (this._displayError) {
+      this._renderError(err.message);
     }
 
   }
 
-  protected async _initWeb3(): Promise<void> {
+  protected async _initWeb3(): Promise<boolean> {
     // init web3 service if have exsting browser provider and 
     // if is not already done
     if ((window as any)._nxweb3) {
       this._web3Service = (window as any)._nxweb3;
-      return;
+      return true;
     }
     console.log('[INFO] Initializing web3 on network: ', this._selectedCryptoCurrency);
     // chose and init provider by checking Symbol attribute
     const provider = await this._getProvider();
     if (!provider) {
-      return;
+      return false;
     }
     // init wallet service with provider
     const web3 = new WalletService(provider);
@@ -206,9 +262,10 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     (window as any)._nxweb3 = web3;
     console.log('[INFO] Web3 initialized');
     console.log('[INFO] Wallet connected status: ',  await this._web3Service.isConnected());
+    return true;
   }
   
-  private async _getProvider(): Promise<NgxWeb3WalletProviderInterface> {
+  private async _getProvider(): Promise<NgxWeb3WalletProviderInterface|undefined> {
     // get provider from network
     let p: NgxWeb3WalletProviderInterface|undefined = undefined;
     const { ethereum = undefined, solana = undefined } = (window as any);
@@ -218,21 +275,23 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       case this._symbol === 'ETH':
       case this._symbol === 'BNB':
         if (!ethereum) {
-          throw new Error(`[ERROR] Ethereum provider not found`);
+          this._handleError(new Error(`[ERROR] Ethereum provider not found`), true, true);
+          break;
         }
         p = new EtherumWalletProvider((window as any)?.ethereum);
         break;
 
       case this._symbol === 'SOL':
         if  (!solana) {
-          throw new Error(`[ERROR] Solana provider not found`);
+          this._handleError(new Error(`[ERROR] Solana provider not found`), true, true);
+          break;
         }
         p = new SolanaWalletProvider((window as any)?.solana);
         break;
+
+      default:
+        this._handleError(new Error(`[ERROR] Unknown provider`), true, true);
     }    
-    if (!p) {
-      throw new Error(`[ERROR] No Web3 provider available. Unknown currency symbol: ${this._symbol}`);
-    }
     return p;
   }
 
