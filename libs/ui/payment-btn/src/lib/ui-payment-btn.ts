@@ -211,18 +211,25 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   private async _getProvider(): Promise<NgxWeb3WalletProviderInterface> {
     // get provider from network
     let p: NgxWeb3WalletProviderInterface|undefined = undefined;
+    const { ethereum = undefined, solana = undefined } = (window as any);
     
     switch (true) {
 
       case this._symbol === 'ETH':
       case this._symbol === 'BNB':
+        if (!ethereum) {
+          throw new Error(`[ERROR] Ethereum provider not found`);
+        }
         p = new EtherumWalletProvider((window as any)?.ethereum);
         break;
 
       case this._symbol === 'SOL':
+        if  (!solana) {
+          throw new Error(`[ERROR] Solana provider not found`);
+        }
         p = new SolanaWalletProvider((window as any)?.solana);
         break;
-    }
+    }    
     if (!p) {
       throw new Error(`[ERROR] No Web3 provider available. Unknown currency symbol: ${this._symbol}`);
     }
