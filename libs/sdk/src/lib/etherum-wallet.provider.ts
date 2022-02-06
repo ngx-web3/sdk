@@ -30,11 +30,19 @@ export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
   }
 
   async connect(): Promise<void> {
-    await this._walletProvider
-      ?.send("eth_accounts", [])
-      ?.then(() => true)
-      ?.catch(() => false);
-    await this.isConnected();
+    if (await this.isConnected()) {
+      return;
+    }
+    try {
+      await this._walletProvider
+          ?.send("eth_requestAccounts", [])
+          ?.then(() => true)
+          ?.catch(() => false);
+      console.log('[INFO] Wallet provider connected');
+      await this.isConnected();
+    } catch (error) {
+      throw new Error('Wallet provider not connected');
+    }
   }
 
   async checkNetwork(symbol?: string, chainid?: number): Promise<void> {
