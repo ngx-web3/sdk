@@ -1,5 +1,12 @@
 {
   "name": "@ngx-web3/sdk",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "@ngx-web3/core": "latest",
+    "@solana/web3.js": "^1.32.0",
+    "big-integer": "^1.6.51",
+    "ethers": "^5.5.3",
+    "web3.storage": "^3.5.3"
+  }
 }
