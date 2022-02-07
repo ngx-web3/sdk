@@ -11,8 +11,9 @@ Simple HTML UI Crypto Payment Button Component that allows your to provide a but
 **Angular**
 
 ```typescript
+  import { Component } from '@angular/core';
   import '@ngx-web3/ui-payment-btn';
-  ...
+  
   @Component({
     selector: 'app-root',
     template: `
@@ -27,6 +28,56 @@ Simple HTML UI Crypto Payment Button Component that allows your to provide a but
     public amount: number = 100;
   }
   ```
+
+```typescript
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+export class AppModule { }
+```
+```json
+    "assets": [
+      "src/favicon.ico",
+      "src/assets",
+      {
+        "input": "node_modules/@ngx-web3/ui-payment-btn/assets/payment-btn",
+        "glob": "**/*",
+        "output": "assets/payment-btn"
+      }
+    ],
+    "allowedCommonJsDependencies": [
+      "@solana/buffer-layout",
+      "bl/BufferList.js",
+      "blob-to-it",
+      "borsh",
+      "bs58",
+      "buffer",
+      "hamt-sharding",
+      "hash.js",
+      "it-parallel-batch",
+      "jayson/lib/client/browser",
+      "p-retry",
+      "parse-link-header",
+      "rabin-wasm",
+      "rpc-websockets",
+      "secp256k1",
+      "tweetnacl",
+      "varint"
+    ]
+```
 
 **React**
   ```tsx
@@ -80,19 +131,15 @@ customElements.define('ngx-web3-root', AppElement);
     amount="100"></ngxweb3-payment-btn>
 ```
 
-**Webpack config**
-```js
-// add assets to the bundle
-```
 
 **Polyfill**
 ```ts
+// allow node crypto library to be used in browser
 if (window && (window as any).global === undefined) {
   console.log('window.global is undefined');
   (window as any).global = window;
-  global.process = {
-      env: { DEBUG: undefined },
-      version: '',
+  (window as any).global.process = {
+    env: { DEBUG: undefined }
   } as any;
 }
 ```
