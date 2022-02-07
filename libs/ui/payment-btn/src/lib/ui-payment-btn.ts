@@ -88,21 +88,9 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       // re-render the UI only if text change
       // init web3 service if not already done 
       // and atribute firstime change name is `symbol`
-
-      // if (!this._web3Service && name === 'symbol' && old === null) {
-      //   this._initComponent()
-      //       .then((res) =>  res 
-      //         ? this.render()
-      //         : this._addStyle()
-      //       )
-      //       .catch(err => {
-      //         // clean DOM
-      //         this.innerHTML = ``;
-      //         this._handleError(err, true, true);
-      //       });
-      // } 
-      if (!this._web3Service && name === 'symbol') {
-        this._initComponent(true)
+      if (name === 'symbol') {
+        const isChainChange =  !this._web3Service && old === null ? false : true;
+        this._initComponent(isChainChange)
             .then((res) =>  res 
               ? this.render()
               : this._addStyle()
@@ -113,6 +101,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
               this._handleError(err, true, true);
             });
       }
+      
 
     } else {
       console.error('[ERROR] Unknown attribute: ', name);
