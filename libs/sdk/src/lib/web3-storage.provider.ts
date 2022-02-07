@@ -1,6 +1,37 @@
 import { Web3Storage } from 'web3.storage';
 import { NgxWeb3StorageProviderInterface } from '@ngx-web3/core';
 
+const apiService = (token: string) => ({
+  get: async (cid: string): Promise<Response> => {
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    const res = await fetch(`https://api.web3.storage/car/${cid}`, { headers });
+    return res
+  },
+  put: async (files: File[], opts?: any) => {
+    // multiple files, as FormData with Content-Disposition headers for each part to specify filenames and the request header Content-Type: multipart/form-data
+    // You can also provide a name for the file using the header X-NAME, but be sure to encode the filename first. For example LICENSE–MIT should be sent as LICENSE%E2%80%93MIT.
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
+    headers.append('x-name', files[0].name);
+    const formData = new FormData();
+    for (const file of files) {
+      const blob = new Blob([file], { type: file.type });
+      formData.append(file.name, blob, file.name);
+    }
+    const res = await fetch(`https://api.web3.storage/upload`, {
+      method: 'POST',
+      headers,
+      body: formData
+    });
+    return await res.json();
+  }
+});
+
 export class Web3StorageProvider implements NgxWeb3StorageProviderInterface {
 
   private _service!: Web3Storage;
