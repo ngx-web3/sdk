@@ -64,14 +64,24 @@ export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
     chainid = id;
     // get current network
     const currentChainid = await this.getChainId();
+
     // check if network is correct
     if (currentChainid !== chainid && this._web3Provider?.request) {
-      // switch network to correct one
-      await this._web3Provider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${chainid}` }], // chainId must be in hexadecimal numbers
-      });
+      // try switch network to correct one
+      try {    
+        await this._web3Provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chainid}` }], // chainId must be in hexadecimal numbers
+        });
+      } catch (error: any) {
+        const msg = error.message.includes('Unrecognized chain ID')
+          ? `${chain.name.toUpperCase()} network not configured. Please install network and configure your wallet before try again.`
+          : error?.message||'Unknown error';
+        throw new Error(msg);
+      }
+        
     }
+
   }
 
   async getAccounts(callback?: (error: Error, accounts: string[]) => void): Promise<string[]> {
