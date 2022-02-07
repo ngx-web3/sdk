@@ -88,8 +88,21 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       // re-render the UI only if text change
       // init web3 service if not already done 
       // and atribute firstime change name is `symbol`
-      if (!this._web3Service && name === 'symbol' && old === null) {
-        this._initComponent()
+
+      // if (!this._web3Service && name === 'symbol' && old === null) {
+      //   this._initComponent()
+      //       .then((res) =>  res 
+      //         ? this.render()
+      //         : this._addStyle()
+      //       )
+      //       .catch(err => {
+      //         // clean DOM
+      //         this.innerHTML = ``;
+      //         this._handleError(err, true, true);
+      //       });
+      // } 
+      if (!this._web3Service && name === 'symbol') {
+        this._initComponent(true)
             .then((res) =>  res 
               ? this.render()
               : this._addStyle()
@@ -99,13 +112,14 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
               this.innerHTML = ``;
               this._handleError(err, true, true);
             });
-      }      
+      }
+
     } else {
       console.error('[ERROR] Unknown attribute: ', name);
     }
   }
 
-  protected async _initComponent(): Promise<boolean> {
+  protected async _initComponent(force?: boolean): Promise<boolean> {
     // get network data using symbol
     const chain = CHAIN_NETWORKS.find(n => n.symbol === this._symbol);
     if (!chain) {
@@ -130,7 +144,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     }
     // set selected crypto currency
     this._selectedCryptoCurrency = chain;
-    return await this._initWeb3();
+    return await this._initWeb3(force);
   }
 
   render() {
@@ -242,10 +256,10 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
 
   }
 
-  protected async _initWeb3(): Promise<boolean> {
+  protected async _initWeb3(force?: boolean): Promise<boolean> {
     // init web3 service if have exsting browser provider and 
     // if is not already done
-    if ((window as any)._nxweb3) {
+    if ((window as any)._nxweb3 && !force) {
       this._web3Service = (window as any)._nxweb3;
       return true;
     }
