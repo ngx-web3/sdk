@@ -24,7 +24,26 @@
           }
         ],
         "styles": ["apps/demo-angular/src/styles.scss"],
-        "scripts": []
+        "scripts": [],
+        "allowedCommonJsDependencies": [
+          "hash.js",
+          "varint",
+          "@solana/buffer-layout",
+          "borsh",
+          "bs58",
+          "buffer",
+          "jayson/lib/client/browser",
+          "rpc-websockets",
+          "secp256k1",
+          "tweetnacl",
+          "blob-to-it",
+          "hamt-sharding",
+          "bl/BufferList.js",
+          "rabin-wasm",
+          "it-parallel-batch",
+          "p-retry",
+          "parse-link-header"
+        ]
       },
       "configurations": {
         "production": {

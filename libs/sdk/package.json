@@ -1,7 +1,7 @@
 {
   "name": "@ngx-web3/sdk",
-  "version": "0.0.1",
-  "type": "commonjs",
+  "version": "0.0.3",
+  "type": "module",
   "dependencies": {
     "@ngx-web3/core": "latest",
     "@solana/web3.js": "^1.32.0",
