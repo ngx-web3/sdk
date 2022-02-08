@@ -1,12 +1,17 @@
 {
   "name": "@ngx-web3/sdk",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "type": "module",
   "dependencies": {
     "@ngx-web3/core": "latest",
     "@solana/web3.js": "^1.32.0",
+    "@web-std/fetch": "^3.0.3",
     "big-integer": "^1.6.51",
+    "crypto-browserify": "^3.12.0",
     "ethers": "^5.5.3",
+    "querystring-es3": "^0.2.1",
+    "stream": "0.0.2",
+    "url": "^0.11.0",
     "web3.storage": "^3.5.4"
   }
 }

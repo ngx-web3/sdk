@@ -1,6 +1,12 @@
 import { Web3Storage } from 'web3.storage';
 import { NgxWeb3StorageProviderInterface } from '@ngx-web3/core';
 
+/**
+ * @deprecated 
+ * Use `Web3Storage` instead
+ * 
+ * @param {string} token 
+ */
 const apiService = (token: string) => ({
   get: async (cid: string): Promise<Response> => {
     const headers = new Headers();
