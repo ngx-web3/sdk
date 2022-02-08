@@ -8,7 +8,7 @@ Simple HTML UI Crypto Payment Button Component that allows your to provide a but
 
 ## Usage
 
-**Angular**
+**Angular >=13**
 
 ```typescript
   import { Component } from '@angular/core';
