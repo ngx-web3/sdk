@@ -1,12 +1,19 @@
-# @ngx-web3/ui-payment-btn
+<center>
+<h1>@ngx-web3/ui-payment-btn</h1>
 
-Simple HTML UI Crypto Payment Button Component that allows your to provide a button to make USD transaction payment with Ethereum (ETH), Binance (BNB) or Solana (SOL) token. It includes real-time currency conversion from USD to selected token using Coingecko API. It also includes an optiionnal UI to display the transaction status. This HTML component is a great way to provide a crypto payment button to your application or website without centralized payment provider. 
+> Webcomponent Crypto Payment Button for Web3 Applications
+</center>
 
-## Install
+
+## 👀 Overview
+Simple HTML UI Crypto Payment Button Component that allows your to provide a button to make USD transaction payment with [Ethereum (ETH)](https://ethereum.org), [Binance (BNB)](https://www.binance.com) or [Solana (SOL)](https://solana.com) token. It includes real-time currency conversion from USD to selected token using [Coingecko API](https://www.coingecko.com/en/api). It also includes an optiionnal UI to display the transaction status. This HTML component is a great way to provide a crypto payment button to your application or website without centralized payment provider. 
+
+
+## ⚙️ Install
 
 - Run `npm install @ngx-web3/ui-payment-btn`
 
-## Usage
+## 📝 Usage
 
 **Angular >=13**
 
@@ -21,6 +28,7 @@ Simple HTML UI Crypto Payment Button Component that allows your to provide a but
       <ngxweb3-payment-btn
           to="0x..."
           symbol="BNB"
+          displayError="true"
           [attr.amount]="amount"></ngxweb3-payment-btn>
     `
   })
@@ -49,6 +57,8 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ```
 ```json
+// angular.json
+
     "assets": [
       "src/favicon.ico",
       "src/assets",
@@ -78,7 +88,7 @@ export class AppModule { }
       "varint"
     ]
 ```
-
+<!-- 
 **React**
   ```tsx
 import '@ngx-web3/ui-payment-btn';
@@ -129,7 +139,7 @@ customElements.define('ngx-web3-root', AppElement);
     to="0x..."
     symbol="BNB"
     amount="100"></ngxweb3-payment-btn>
-```
+``` -->
 
 
 **Polyfill**
@@ -147,19 +157,19 @@ if (window && (window as any).global === undefined) {
 
 ## Network & ChainId configuration options
 
-**BNB**
-- mainnet: 38
-- testnet: 61
-
-**ETH**
-- mainnet: 1
-- ropsten: 3
-- rinkeby: 4
-
-**SOL**
-- mainnet-beta: 55
-- testnet: 56
-- devnet: 57
+| **Networks** | id |
+|--------------|----|
+| **BNB**      |    |
+| mainnet      | 38 |
+| testnet      | 61 |
+| **ETH**      |    |
+| mainnet      | 1  |
+| ropsten      | 3  |
+| rinkeby      | 4  |
+| **SOL**      |    |
+| mainnet-beta | 55 |
+| testnet      | 56 |
+| devnet       | 57 |
 
 <hr/>
 
