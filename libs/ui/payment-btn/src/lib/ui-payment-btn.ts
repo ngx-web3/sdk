@@ -1,53 +1,17 @@
+import { NgxWeb3WalletProviderInterface } from '@ngx-web3/core';
 import { EtherumWalletProvider, SolanaWalletProvider, WalletService, CHAIN_NETWORKS } from '@ngx-web3/sdk';
 import { defineCustomElement as defineIonButton} from '@ionic/core/components/ion-button';
 import { defineCustomElement as defineIonItem} from '@ionic/core/components/ion-item';
 import { defineCustomElement as defineIonLabel} from '@ionic/core/components/ion-label';
 import { defineCustomElement as defineIonSkeleton} from '@ionic/core/components/ion-skeleton-text';
+import { initialize } from "@ionic/core/components";
 import { defineCustomElement as defineIonIcon } from 'ionicons/components/ion-icon';
 import { logoBitcoin, closeCircle } from 'ionicons/icons';
 import { addIcons } from 'ionicons/components';
-import { initialize } from "@ionic/core/components";
-import { NgxWeb3WalletProviderInterface } from '@ngx-web3/core';
-// here import svg from noode_modules/cryptocurrency-icons/svg/white/bnb.svg
-import * as QrCode from 'qrcode';
+import { generateQrCodeBase64 } from './qrcode-utils';
+import { ATTR } from './attributes';
+import { SVG } from './svg';
 
-
-const generateQrURL = (address: string, value: string, networkName: string) => {
-  // ethereum:0x89205a3a3b2a69de6dbf7f01ed13b2108b2c43e7/transfer?address=0x8e23ee67d1332ad560396262c48ffbb01f93d052&uint256=1
-  // ethereum:0xfb6916095ca1df60bb79Ce92ce3ea74c37c5d359?value=2.014e18
-  const uri = `${networkName.toLocaleLowerCase()}:${address}/?value=${value}`;
-  return uri;
-}
-
-const generateQrCodeBase64 = async (to: string, amount: string, networkName: string) => {
-  const url = generateQrURL(to, amount, networkName);
-  let res;
-  try {
-    res =  await QrCode.toDataURL(url)
-  } catch (err) {
-    console.error(err)
-  }
-  return res;
-  // const qrSvg = new QrCode({
-  //   content: url,
-  //   padding: 2,
-  //   width: 100,
-  //   height: 100,
-  //   color: "#000000",
-  //   background: "#ffffff",
-  //   ecl: "M",
-  //   join: true
-  // }).svg({container: 'svg-viewbox'} as any);
-  // return qrSvg;
-}
-
-const SVG = {
-  SOL: `./assets/payment-btn/sol.svg`,
-  ETH: `./assets/payment-btn/eth.svg`,
-  BNB: `./assets/payment-btn/bnb.svg`
-}
-
-const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error', 'is-style-disabled', 'display-qrcode'];
 
 export class NgxWeb3UiPaymentButton extends HTMLElement {
 
@@ -125,10 +89,10 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       else {
         (this as any)['_' + name] = value;
       }
-      // re-render the UI only if text change
+      // re-render the UI only if symbol or chainid change
       // init web3 service if not already done 
       // and atribute firstime change name is `symbol`
-      if (name === 'symbol') {
+      if (name === 'symbol' || (name === 'chainid' && this._symbol)) {
         const isChainChange =  !this._web3Service && old === null ? false : true;
         this._initComponent(isChainChange)
             .then((res) =>  res 
@@ -140,6 +104,12 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
               this.innerHTML = ``;
               this._handleError(err, true, true);
             });
+      }
+      if (name === 'amount' && old !== null && this._displayQrCode === true) {
+        this._rerenderQrCode();
+      }
+      if (name === 'to' && old !== null && this._displayQrCode === true) {
+        this._rerenderQrCode();
       }
       
 
@@ -179,11 +149,12 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   async render() {
     console.log('[INFO] Rendering UI');
     const qrCode = (this._displayQrCode)
-      ? `<img src="${await generateQrCodeBase64(
-          this._to, 
-          this._amount, 
-          this._selectedCryptoCurrency.displayName
-        )}"/>`
+      ? `<img src="${await generateQrCodeBase64({
+          address: this._to, 
+          value: this._amount, 
+          networkName: this._selectedCryptoCurrency.displayName,
+          chainid: this._chainid
+        })}"/>`
       : '';
     const btn = (this._selectedCryptoCurrency)
       ? `<ion-button>
@@ -252,6 +223,26 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
         this._dispatchEvent('success', {tx});
       }
     });
+  }
+
+  protected async _rerenderQrCode() {
+    const el = this.querySelector('img');
+    if (!el) {
+      return;
+    }
+    console.log('[INFO] Re-rendering QR code');
+    // generate new qr code
+    const imgUrl = await generateQrCodeBase64({
+      address: this._to, 
+      value: this._amount, 
+      networkName: this._selectedCryptoCurrency.displayName,
+      chainid: this._chainid
+    });
+    if (!imgUrl) {
+      return;
+    }
+    // update qr code
+    el.setAttribute('src', imgUrl);
   }
 
   protected _dispatchEvent(type: string, action: any) {
