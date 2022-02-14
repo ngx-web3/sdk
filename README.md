@@ -10,7 +10,7 @@ NgxWeb3 provide a collection of packages to simplify development of your dapps i
 
 | **packages**      |  Description  | Preview |
 |--------------|----|----|
-| [@ngx-web3/ui-payment-btn](./libs/ui/payment-btn/README.md)      | Webcomponent Crypto Payment Button for Web3 Applications | <a href="https://crypto-payment-btn.web.app/" target="_blank">Live Demo</a> |
+| [@ngx-web3/ui-payment-btn](./libs/ui/payment-btn/README.md)      | Web Component Crypto Payment Button for Web3 Applications | <a href="https://crypto-payment-btn.web.app/" target="_blank">Live Demo</a> |
 
 <hr/>
 
