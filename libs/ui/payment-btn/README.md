@@ -156,13 +156,16 @@ if (window && (window as any).global === undefined) {
 
 ## Component Options
 
-| **attribut** | description | type | default | required |
+| Attribut | Description | Type | Default | Required |
 |--------------|----|--------|-------|---------|
-| to    | Wallet destination adrress   | String | - | true |
+| chainid | Network channel id. Refere to `Network & ChainId` documentation section to select correct value | String | mainnet | false |
+| to    | Wallet destination adrress | String | - | true |
 | symbol | Token symbol | String | - | true |
 | amount | USD Amount to send | Number | - | true |
+| display-qrcode | Display QR Code | Boolean | true | false |
 | display-error | Display error message | Boolean | false | false |
 
+***Note: if `chainid` is use, it must be the first declared attribut.***
 
 ## Component Events
 
