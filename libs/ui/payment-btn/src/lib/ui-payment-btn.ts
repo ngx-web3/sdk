@@ -9,6 +9,37 @@ import { addIcons } from 'ionicons/components';
 import { initialize } from "@ionic/core/components";
 import { NgxWeb3WalletProviderInterface } from '@ngx-web3/core';
 // here import svg from noode_modules/cryptocurrency-icons/svg/white/bnb.svg
+import * as QrCode from 'qrcode';
+
+
+const generateQrURL = (address: string, value: string, networkName: string) => {
+  // ethereum:0x89205a3a3b2a69de6dbf7f01ed13b2108b2c43e7/transfer?address=0x8e23ee67d1332ad560396262c48ffbb01f93d052&uint256=1
+  // ethereum:0xfb6916095ca1df60bb79Ce92ce3ea74c37c5d359?value=2.014e18
+  const uri = `${networkName.toLocaleLowerCase()}:${address}/?value=${value}`;
+  return uri;
+}
+
+const generateQrCodeBase64 = async (to: string, amount: string, networkName: string) => {
+  const url = generateQrURL(to, amount, networkName);
+  let res;
+  try {
+    res =  await QrCode.toDataURL(url)
+  } catch (err) {
+    console.error(err)
+  }
+  return res;
+  // const qrSvg = new QrCode({
+  //   content: url,
+  //   padding: 2,
+  //   width: 100,
+  //   height: 100,
+  //   color: "#000000",
+  //   background: "#ffffff",
+  //   ecl: "M",
+  //   join: true
+  // }).svg({container: 'svg-viewbox'} as any);
+  // return qrSvg;
+}
 
 const SVG = {
   SOL: `./assets/payment-btn/sol.svg`,
@@ -16,7 +47,7 @@ const SVG = {
   BNB: `./assets/payment-btn/bnb.svg`
 }
 
-const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error', 'is-style-disabled'];
+const ATTR = ['amount', 'to', 'text', 'chainid', 'symbol', 'display-error', 'is-style-disabled', 'display-qrcode'];
 
 export class NgxWeb3UiPaymentButton extends HTMLElement {
 
@@ -25,6 +56,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   protected _symbol!: string;
   protected _chainid?: number;
   protected _to!: string;
+  protected _displayQrCode = true;
   protected _displayError!: boolean;
   protected _isStyleDisabled!: boolean;
   private _web3Service!: WalletService;
@@ -75,12 +107,20 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       } 
       // enforce for display alert
       else if (name === 'display-error') {
-        this._displayError = true;
-      } 
+        this._displayError = value === 'true'
+          ? true
+          : false;
+      }
       // enforce type for is-style-disabled
       else if (name === 'is-style-disabled') {
         this._isStyleDisabled = true;
       } 
+      // enforce type for display-qrcode
+      else if (name === 'display-qrcode') {
+        this._displayQrCode = value === 'true'
+          ? true
+          : false;
+      }
       // and for others
       else {
         (this as any)['_' + name] = value;
@@ -136,16 +176,25 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     return await this._initWeb3(force);
   }
 
-  render() {
+  async render() {
     console.log('[INFO] Rendering UI');
-    const html = (this._selectedCryptoCurrency)
+    const qrCode = (this._displayQrCode)
+      ? `<img src="${await generateQrCodeBase64(
+          this._to, 
+          this._amount, 
+          this._selectedCryptoCurrency.displayName
+        )}"/>`
+      : '';
+    const btn = (this._selectedCryptoCurrency)
       ? `<ion-button>
           <ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>
           ${this.buttonText}
         </ion-button>`
       : ``;
     // update the UI
-    this.innerHTML = html;
+    this.innerHTML = `
+      <div>${qrCode + btn}</div>
+    `;
     if (this._selectedCryptoCurrency) {
       this._addEvents();
     }
@@ -172,6 +221,11 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       }
       ion-label {
         padding-left: 6px;
+      }
+      div > img {
+        max-width: 80px;
+        vertical-align: -webkit-baseline-middle;
+        margin-right: 10px;
       }
     `;
     style.innerHTML = rules;

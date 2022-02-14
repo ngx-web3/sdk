@@ -5,6 +5,7 @@
   "dependencies": {
     "@ngx-web3/sdk": "latest",
     "@ionic/core": "latest",
-    "big-integer": " 1.6.51"
+    "big-integer": " 1.6.51",
+    "qrcode": "^1.1.0"
   }
 }
