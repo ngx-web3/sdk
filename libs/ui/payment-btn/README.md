@@ -28,7 +28,7 @@ Simple HTML UI Crypto Payment Button Component that allows your to provide decen
       <ngxweb3-payment-btn
           to="0x..."
           symbol="BNB"
-          displayError="true"
+          display-error="true"
           [attr.amount]="amount"></ngxweb3-payment-btn>
     `
   })
