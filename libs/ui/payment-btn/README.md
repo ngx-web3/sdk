@@ -1,12 +1,12 @@
 <center>
 <h1>@ngx-web3/ui-payment-btn</h1>
 
-> Webcomponent Crypto Payment Button for Web3 Applications
+> Web Component Crypto Payment Button for Web3 Applications
 </center>
 
 
 ## 👀 Overview
-Simple HTML UI Crypto Payment Button Component that allows your to provide a button to make USD transaction payment with [Ethereum (ETH)](https://ethereum.org), [Binance (BNB)](https://www.binance.com) or [Solana (SOL)](https://solana.com) token. It includes real-time currency conversion from USD to selected token using [Coingecko API](https://www.coingecko.com/en/api). It also includes an optiionnal UI to display the transaction status. This HTML component is a great way to provide a crypto payment button to your application or website without centralized payment provider. 
+Simple HTML UI Crypto Payment Button Component that allows your to provide decentralized USD transaction payment solution with [Ethereum (ETH)](https://ethereum.org), [Binance (BNB)](https://www.binance.com) or [Solana (SOL)](https://solana.com) token. It includes real-time currency conversion from USD to selected token using [Coingecko API](https://www.coingecko.com/en/api). It also includes an optiionnal UI to display the transaction status. This HTML component is a great way to provide a crypto payment button to your application or website without centralized payment provider. 
 
 
 ## ⚙️ Install
@@ -157,7 +157,7 @@ if (window && (window as any).global === undefined) {
 
 ## Network & ChainId configuration options
 
-| **Networks** | id |
+| **Networks** | chainid |
 |--------------|----|
 | **BNB**      |    |
 | mainnet      | 38 |
