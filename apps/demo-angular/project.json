@@ -26,23 +26,23 @@
         "styles": ["apps/demo-angular/src/styles.scss"],
         "scripts": [],
         "allowedCommonJsDependencies": [
-          "hash.js",
-          "varint",
           "@solana/buffer-layout",
+          "bl/BufferList.js",
+          "blob-to-it",
           "borsh",
           "bs58",
           "buffer",
+          "hamt-sharding",
+          "hash.js",
+          "it-parallel-batch",
           "jayson/lib/client/browser",
+          "p-retry",
+          "parse-link-header",
+          "rabin-wasm",
           "rpc-websockets",
           "secp256k1",
           "tweetnacl",
-          "blob-to-it",
-          "hamt-sharding",
-          "bl/BufferList.js",
-          "rabin-wasm",
-          "it-parallel-batch",
-          "p-retry",
-          "parse-link-header"
+          "varint"
         ]
       },
       "configurations": {
