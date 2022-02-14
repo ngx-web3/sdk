@@ -38,6 +38,22 @@
         "passWithNoTests": true
       }
     },
+    "package": {
+      "executor": "@nrwl/web:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "project": "libs/ui/payment-btn/package.json",
+        "outputPath": "dist/libs/ui/payment-btn",
+        "entryFile": "libs/ui/payment-btn/src/index.ts",
+        "tsConfig": "libs/ui/payment-btn/tsconfig.lib.json",
+        "buildableProjectDepsInPackageJsonType": "peerDependencies",
+        "external": [
+          "@ngx-web3/sdk",
+          "@ionic/core",
+          "big-integer"
+        ]
+      }
+    },
     "deploy": {
       "executor": "ngx-deploy-npm:deploy",
       "options": {
