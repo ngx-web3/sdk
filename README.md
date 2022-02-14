@@ -2,6 +2,10 @@
 
 > Blockchain tools for web developpement
 
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php) 
+![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
+
+
 ## 👀 Overview
 
 NgxWeb3 provide a collection of packages to simplify development of your dapps in Typescript, Angular, React and WebComponent.
