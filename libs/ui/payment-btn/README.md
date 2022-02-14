@@ -154,6 +154,25 @@ if (window && (window as any).global === undefined) {
 }
 ```
 
+## Component Options
+
+| **attribut** | description | type | default | required |
+|--------------|----|--------|-------|---------|
+| to    | Wallet destination adrress   | String | - | true |
+| symbol | Token symbol | String | - | true |
+| amount | USD Amount to send | Number | - | true |
+| displayError | Display error message | Boolean | false | false |
+
+
+## Component Events
+
+| **Event name** | description | Payload | 
+|--------------|----|--------|
+| success    | Success event action | {tx: transactionHash} | 
+| error    | Error event action | {error: Error} | 
+
+
+
 ## 🔍 Exemples
 
 Real project demo:
