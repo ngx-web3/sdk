@@ -154,6 +154,11 @@ if (window && (window as any).global === undefined) {
 }
 ```
 
+## 🔍 Exemples
+
+Real project demo:
+- Angular: https://github.com/ngx-web3/payment-btn-angular-demo
+
 
 ## Network & ChainId configuration options
 

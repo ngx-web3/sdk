@@ -15,12 +15,9 @@ NgxWeb3 provide a collection of packages to simplify development of your dapps i
 <hr/>
 
 
-## 🔍 Exemples
+## Exemples
 
 Check exemple installation for `Angular`, `React` and `WebComponent` in `./apps/` folder.
-
-And you can ckeck real project demo:
-- Angular: https://github.com/ngx-web3/payment-btn-angular-demo
 
 ## 💻 Contributing
 
