@@ -161,7 +161,7 @@ if (window && (window as any).global === undefined) {
 | to    | Wallet destination adrress   | String | - | true |
 | symbol | Token symbol | String | - | true |
 | amount | USD Amount to send | Number | - | true |
-| displayError | Display error message | Boolean | false | false |
+| display-error | Display error message | Boolean | false | false |
 
 
 ## Component Events
