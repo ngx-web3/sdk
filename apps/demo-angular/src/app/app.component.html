@@ -3,14 +3,20 @@
   <p>
     Price: ${{amount}} USD
   </p>
-  
   <ngxweb3-payment-btn
+    to="0xbe5b336eF62D1626940363Cf34bE079e0AB89F20"
+    display-error="true"
+    display-qrcode="true"
+    [attr.symbol]="symbol"
+    [attr.amount]="amount"></ngxweb3-payment-btn>
+  
+  <!-- <ngxweb3-payment-btn
       chainid="61"
       to="0x..."
       display-error="true"
       display-qrcode="true"
       [attr.symbol]="symbol"
-      [attr.amount]="amount"></ngxweb3-payment-btn>
+      [attr.amount]="amount"></ngxweb3-payment-btn> -->
 </div>
 
 

@@ -10,7 +10,7 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   title = 'demo-angular';
   amount = 250;
-  symbol = 'BNB';
+  symbol = 'BTC';
 
   async storeFile(input: HTMLInputElement) {
     const provider = new Web3StorageProvider(environment.web3Storage.token);
