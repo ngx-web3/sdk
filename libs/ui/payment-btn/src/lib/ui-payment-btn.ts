@@ -44,6 +44,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     addIcons({'logo-sol': SVG.SOL});
     addIcons({'logo-eth': SVG.ETH});
     addIcons({'logo-bnb': SVG.BNB});
+    addIcons({'logo-btc': SVG.BTC});
     addIcons({'close-circle': closeCircle});
     addIcons({'logo-bitcoin': logoBitcoin});
     initialize();
@@ -95,10 +96,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       if (name === 'symbol' || (name === 'chainid' && this._symbol)) {
         const isChainChange =  !this._web3Service && old === null ? false : true;
         this._initComponent(isChainChange)
-            .then((res) =>  res 
-              ? this.render()
-              : this._addStyle()
-            )
+            .then((res) =>  (this.render(), this._addStyle()))
             .catch(err => {
               // clean DOM
               this.innerHTML = ``;
@@ -148,20 +146,44 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
 
   async render() {
     console.log('[INFO] Rendering UI');
-    const qrCode = (this._displayQrCode)
-      ? `<img src="${await generateQrCodeBase64({
-          address: this._to, 
-          value: this._amount, 
-          networkName: this._selectedCryptoCurrency.displayName,
-          chainid: this._chainid
-        })}"/>`
-      : '';
-    const btn = (this._selectedCryptoCurrency)
+    let qrCode = '';
+    if (this._displayQrCode) {
+      const qrCodeSrc = await generateQrCodeBase64({
+        address: this._to, 
+        value: this._amount, 
+        networkName: this._selectedCryptoCurrency.displayName,
+        chainid: this._chainid
+      }).catch(err => {
+        this._handleError(err, false, true);
+      });
+      qrCode = (qrCodeSrc)
+        ? `<img src="${qrCodeSrc}"/>`
+        : `<i>QrCode not available for ${this._symbol}.</i><br/>`;
+    }
+    let btn = (this._selectedCryptoCurrency)
       ? `<ion-button>
           <ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>
           ${this.buttonText}
         </ion-button>`
       : ``;
+    // if no web3 provider is selected. Allow display QrCode with description text only
+    if (!this._web3Service) {
+      btn = this._text 
+        ? `
+            <br/>
+            <p>
+              <ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>
+              ${this.buttonText}
+            </p>
+          `
+        : `
+          <br/>
+          <p>
+            <ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>
+            ${this.buttonText} by scanning this qrcode with your mobile wallet
+          </p>
+        `
+    }
     // update the UI
     this.innerHTML = `
       <div>${qrCode + btn}</div>
@@ -197,6 +219,11 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
         max-width: 80px;
         vertical-align: -webkit-baseline-middle;
         margin-right: 10px;
+      }
+      p ion-icon {
+        vertical-align: -webkit-baseline-middle;
+        vertical-align: middle;
+        margin-right: 5px;
       }
     `;
     style.innerHTML = rules;
@@ -320,6 +347,9 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     
     switch (true) {
 
+      case this._symbol === 'BTC':
+        break;
+      
       case this._symbol === 'ETH':
       case this._symbol === 'BNB':
         if (!ethereum) {

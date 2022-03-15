@@ -4,6 +4,14 @@ import { NgxWeb3WalletProviderInterface } from "..";
 
 export const CHAIN_NETWORKS = [
   {
+    name: 'btc', 
+    displayName: 'Bitcoin',
+    symbol: 'BTC', 
+    type: [
+      {name: 'mainnet', id: 0},
+    ]
+  },
+  {
     name: 'bsc', 
     displayName: 'BNB',
     symbol: 'BNB', 
