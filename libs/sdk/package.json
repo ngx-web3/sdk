@@ -1,6 +1,6 @@
 {
   "name": "@ngx-web3/sdk",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "dependencies": {
     "@ngx-web3/core": "latest",
