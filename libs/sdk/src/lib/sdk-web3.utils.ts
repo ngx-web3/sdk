@@ -37,3 +37,20 @@ export const fromUSDtoBNB = async (val: string): Promise<string> => {
   const result = parseFloat(val) / data.binancecoin.usd;
   return result.toString();
 }
+
+// request api to conver usd to btc
+export const fromUSDtoBTC = async (val: string): Promise<string> => {
+  const url = `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const result = parseFloat(val) / data.bitcoin.usd;
+  return result.toString();
+}
+
+// request api to conver usd to wei
+export const fromUSDtoWEI = async (val: string): Promise<string> => {
+  const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`);
+  const data = await response.json();
+  const result = parseFloat(val) / data.ethereum.usd;
+  return toWei(result.toString()).toString();
+}
