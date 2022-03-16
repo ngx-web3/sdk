@@ -81,7 +81,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
         this._isStyleDisabled = true;
       } 
       // enforce type for display-qrcode
-      else if (name === 'display-qrcode') {
+      else if (name === 'display-qrcode') {        
         this._displayQrCode = value === 'true'
           ? true
           : false;
@@ -90,7 +90,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       else {
         (this as any)['_' + name] = value;
       }
-      // re-render the UI only if symbol or chainid change
+      // re-render the UI only if symbol, display-qrcode or chainid change
       // init web3 service if not already done 
       // and atribute firstime change name is `symbol`
       if (name === 'symbol' || (name === 'chainid' && this._symbol)) {
@@ -108,8 +108,10 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       }
       if (name === 'to' && old !== null && this._displayQrCode === true) {
         this._rerenderQrCode();
+      } 
+      if (name === 'display-qrcode' && old !== null) {
+        this.render();
       }
-      
 
     } else {
       console.error('[ERROR] Unknown attribute: ', name);
