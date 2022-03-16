@@ -1,6 +1,6 @@
 {
   "name": "@ngx-web3/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "dependencies": {
     "tslib": "^2.0.0"
