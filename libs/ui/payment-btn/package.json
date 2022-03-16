@@ -1,6 +1,6 @@
 {
   "name": "@ngx-web3/ui-payment-btn",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "type": "module",
   "dependencies": {
     "@ngx-web3/sdk": "latest",
