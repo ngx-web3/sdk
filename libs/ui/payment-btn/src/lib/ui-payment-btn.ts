@@ -188,7 +188,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     }
     // update the UI
     this.innerHTML = `
-      <div>${qrCode + btn}</div>
+      <div class="ngx-ui-container">${qrCode + btn}</div>
     `;
     if (this._selectedCryptoCurrency) {
       this._addEvents();
@@ -287,8 +287,8 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     let elementHTML = this.querySelector('#ngxweb3-error');
     // if not found, create it
     if (!elementHTML) {
-      const ionButton = this.querySelector('ion-button');
-      ionButton?.insertAdjacentHTML('afterend', `<div id="ngxweb3-error"></div>`);
+      const el = this.querySelector('.ngx-ui-container:first-child');
+      el?.insertAdjacentHTML('afterend', `<div id="ngxweb3-error"></div>`);
       elementHTML = this.querySelector('#ngxweb3-error');
     }
     // display error 
