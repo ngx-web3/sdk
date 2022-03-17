@@ -3,12 +3,14 @@
   <p>
     Price: ${{amount}} USD
   </p>
+
+  <button (click)="displayQrCode = !displayQrCode">toggle qrcode {{displayQrCode}}</button>
   <ngxweb3-payment-btn
-    to="0xbe5b336eF62D1626940363Cf34bE079e0AB89F20"
-    display-error="true"
-    display-qrcode="true"
-    [attr.symbol]="symbol"
-    [attr.amount]="amount"></ngxweb3-payment-btn>
+      to="3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5"
+      display-error="true"
+      [attr.display-qrcode]="displayQrCode"
+      [attr.symbol]="'BTC'"
+      [attr.amount]="amount"></ngxweb3-payment-btn>
   
   <!-- <ngxweb3-payment-btn
       chainid="61"
