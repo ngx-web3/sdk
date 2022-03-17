@@ -6,7 +6,7 @@
 
 
 ## 👀 Overview
-Simple HTML UI Crypto Payment Button Component that allows your to provide decentralized USD transaction payment solution with [Ethereum (ETH)](https://ethereum.org), [Binance (BNB)](https://www.binance.com) or [Solana (SOL)](https://solana.com) token. It includes real-time currency conversion from USD to selected token using [Coingecko API](https://www.coingecko.com/en/api). It also includes an optiionnal UI to display the transaction status. This HTML component is a great way to provide a crypto payment button to your application or website without centralized payment provider. 
+Simple HTML UI Crypto Payment Button Component that allows your to provide 100% decentralized USD transaction transactions solution with [Bitcoin (BTC)](https://bitcoin.org/) [Ethereum (ETH)](https://ethereum.org), [Binance (BNB)](https://www.binance.com) or [Solana (SOL)](https://solana.com) token. It includes real-time currency conversion from USD to selected token using [Coingecko API](https://www.coingecko.com/en/api). It also includes an optionnal UI parametter to display QRCode and the transaction status. This HTML component is a great way to provide a crypto payment button to your application or website without centralized payment provider. 
 
 
 ## ⚙️ Install
@@ -178,14 +178,18 @@ if (window && (window as any).global === undefined) {
 
 ## 🔍 Exemples
 
-Real project demo:
-- Angular: https://github.com/ngx-web3/payment-btn-angular-demo
+Real project:
+- Angular demo: https://github.com/ngx-web3/payment-btn-angular-demo
+- CashBlock dApp: https://cashblock.web.app
 
 
 ## Network & ChainId configuration options
 
 | **Networks** | chainid |
 |--------------|----|
+| **BTC**      |    |
+| mainnet      | -  |
+| testnet      | -  |
 | **BNB**      |    |
 | mainnet      | 38 |
 | testnet      | 61 |
@@ -201,4 +205,4 @@ Real project demo:
 <hr/>
 
 
-*Note: User must have an Web3 Wallet provider like `metamask` or `phantom` to use this component.*
+*Note: User must have an Web3 Wallet provider like `metamask` or `phantom` to use this component from web browser.*
