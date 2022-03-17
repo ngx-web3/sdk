@@ -51,6 +51,8 @@ export const fromUSDtoBTC = async (val: string): Promise<string> => {
 export const fromUSDtoWEI = async (val: string): Promise<string> => {
   const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`);
   const data = await response.json();
-  const result = parseFloat(val) / data.ethereum.usd;
-  return toWei(result.toString()).toString();
+  const result = (parseFloat(val) / data.ethereum.usd);
+  // split the result to get 18 length string
+  const value = result.toString().slice(0, 18);
+  return toWei(value, 'ether').toString();
 }
