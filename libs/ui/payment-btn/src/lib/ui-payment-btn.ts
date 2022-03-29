@@ -368,10 +368,6 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
         p = new SolanaWalletProvider((window as any)?.solana);
         break;
       case this._symbol === 'DOT':
-        if  (!solana) {
-          this._handleError(new Error(`[ERROR] Polkadot provider not found`), true, true);
-          break;
-        }
         p = new PolkadotWalletProvider((window as any)?.polkadot||'wss://rpc.polkadot.io');
         break;
 
