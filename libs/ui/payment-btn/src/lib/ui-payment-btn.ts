@@ -175,14 +175,12 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
         ? `
             <br/>
             <p>
-              <ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>
               ${this.buttonText}
             </p>
           `
         : `
           <br/>
           <p>
-            <ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>
             ${this.buttonText} by scanning this qrcode with your mobile wallet
           </p>
         `
