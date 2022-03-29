@@ -39,15 +39,25 @@ export const CHAIN_NETWORKS = [
       {name: 'testnet', id: 2},
       {name: 'devnet', id: 3},
     ]
+  },
+  {
+    name: 'polkadot', 
+    symbol: 'DOT', 
+    displayName: 'Polkadot',
+    type: [
+      {name: 'polkadot', id: 0},
+      {name: 'kusama', id: 2},
+      {name: 'westend', id: 42},
+    ]
   }
 
 ];
 
-export class NgxWeb3WalletService {
+export abstract class NgxWeb3WalletService {
 
-  protected _provider!: NgxWeb3WalletProviderInterface;
+  protected readonly _provider!: NgxWeb3WalletProviderInterface;
 
-  constructor(provider: NgxWeb3WalletProviderInterface) {
+  constructor(readonly provider: NgxWeb3WalletProviderInterface) {
     if (!provider) {
       throw new Error('Web3 is not supported. Not provider provided');
     }

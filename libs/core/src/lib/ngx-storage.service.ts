@@ -1,6 +1,6 @@
 import { NgxWeb3StorageProviderInterface } from './core.interface';
 
-export class NgxWeb3StorageService {
+export abstract class NgxWeb3StorageService {
 
   constructor(private readonly _provider: NgxWeb3StorageProviderInterface) {
     this._provider = _provider;

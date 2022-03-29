@@ -1,5 +1,5 @@
 import { NgxWeb3WalletProviderInterface } from '@ngx-web3/core';
-import { EtherumWalletProvider, SolanaWalletProvider, WalletService, CHAIN_NETWORKS } from '@ngx-web3/sdk';
+import { EtherumWalletProvider, SolanaWalletProvider, WalletService, CHAIN_NETWORKS, PolkadotWalletProvider } from '@ngx-web3/sdk';
 import { defineCustomElement as defineIonButton} from '@ionic/core/components/ion-button';
 import { defineCustomElement as defineIonItem} from '@ionic/core/components/ion-item';
 import { defineCustomElement as defineIonLabel} from '@ionic/core/components/ion-label';
@@ -45,6 +45,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     addIcons({'logo-eth': SVG.ETH});
     addIcons({'logo-bnb': SVG.BNB});
     addIcons({'logo-btc': SVG.BTC});
+    addIcons({'logo-dot': SVG.DOT});
     addIcons({'close-circle': closeCircle});
     addIcons({'logo-bitcoin': logoBitcoin});
     initialize();
@@ -367,6 +368,13 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
           break;
         }
         p = new SolanaWalletProvider((window as any)?.solana);
+        break;
+      case this._symbol === 'DOT':
+        if  (!solana) {
+          this._handleError(new Error(`[ERROR] Polkadot provider not found`), true, true);
+          break;
+        }
+        p = new PolkadotWalletProvider((window as any)?.polkadot||'wss://rpc.polkadot.io');
         break;
 
       default:

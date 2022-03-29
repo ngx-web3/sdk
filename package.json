@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
     "@ionic/core": "^6.0.4",
+    "@polkadot/api": "^7.14.3",
     "@solana/web3.js": "^1.32.0",
     "@web-std/fetch": "^3.0.3",
     "big-integer": "^1.6.51",
