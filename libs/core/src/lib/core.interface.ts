@@ -1,14 +1,17 @@
+export interface NgxWeb3File extends File {
+  ipfsFileCidPath: string; 
+  ipfsFileNamePath: string;
+}
+
 export abstract class NgxWeb3StorageCore {
   protected abstract _storeFiles(files: File[]): Promise<string>;
-  protected abstract _findFile(cid: string): Promise<Partial<File & {
-    ipfsPath: string;
-  }>[]>;
+  protected abstract _findFile(cid: string): Promise<NgxWeb3File[]>;
 }
 
 export interface NgxWeb3StorageProviderInterface {
 
   storeFiles<T>(files: File[], opts?: T): Promise<string>;
-  findFile(cid: string): Promise<Partial<File & {ipfsPath: string}>[]>;
+  findFile(cid: string): Promise<NgxWeb3File[]>;
 
 }
 
