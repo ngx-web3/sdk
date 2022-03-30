@@ -1,5 +1,5 @@
 import { Web3Storage } from 'web3.storage';
-import { NgxWeb3StorageProviderInterface } from '@ngx-web3/core';
+import { NgxWeb3File, NgxWeb3StorageProviderInterface } from '@ngx-web3/core';
 
 /**
  * @deprecated 
@@ -75,7 +75,7 @@ export class Web3StorageProvider implements NgxWeb3StorageProviderInterface {
     );
   }
 
-  async findFile(cid: string): Promise<Partial<File & {ipfsPath: string}>[]> {
+  async findFile(cid: string): Promise<NgxWeb3File[]> {
     const res = await this._service.get(cid);
     if (!res) {
       throw new Error('File not found')
@@ -86,14 +86,16 @@ export class Web3StorageProvider implements NgxWeb3StorageProviderInterface {
     }
     // request succeeded! 
     // unpack File objects from the response
+    const ngxWeb3File: NgxWeb3File[] = [];
     const files = await res.files();
     for (const file of files) {
       // console.log(`${file.cid} -- ${file.webkitRelativePath} -- ${file.size}`);
       // add custom properties to the File object
-      (file as any).ipfsPath = `https://ipfs.io/ipfs/${cid}/${file.name}`;
-      (file as any).ipfsFilePath = `https://ipfs.io/ipfs/${file.cid}`;
+      (file as any).ipfsFileCidPath = `https://ipfs.io/ipfs/${file.cid}`;
+      (file as any).ipfsFileNamePath = `https://ipfs.io/ipfs/${cid}/${file.name}`;
+      ngxWeb3File.push(file as any);
     }
-    return files;
+    return ngxWeb3File;
   }
 
 }
