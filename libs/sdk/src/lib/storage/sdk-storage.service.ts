@@ -1,5 +1,5 @@
 import { NgxWeb3StorageService, NgxWeb3StorageProviderInterface } from "@ngx-web3/core";
-import { NgxWeb3StorageInterface } from "./sdk-web3.interface";
+import { NgxWeb3StorageInterface } from "./storage.interface";
 
 export class StorageService extends NgxWeb3StorageService implements NgxWeb3StorageInterface {
   

@@ -1,6 +1,6 @@
 import { NgxWeb3WalletProviderInterface, NgxWeb3WalletService } from "@ngx-web3/core";
 import { fromUSDtoBNB, fromUSDtoEther, fromUSDtoSOL } from "./sdk-web3.utils";
-import { NgxWeb3RequestPayment } from "./sdk-web3.interface";
+import { NgxWeb3RequestPayment } from "./transaction.interface";
 
 export class WalletService extends NgxWeb3WalletService implements NgxWeb3RequestPayment {
 

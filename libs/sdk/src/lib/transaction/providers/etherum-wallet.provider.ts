@@ -1,6 +1,6 @@
 import { CHAIN_NETWORKS, NgxWeb3WalletProviderInterface } from "@ngx-web3/core";
 import { ethers } from "ethers";
-import { toWei } from "./sdk-web3.utils";
+import { toWei } from "../sdk-web3.utils";
 
 export class EtherumWalletProvider implements NgxWeb3WalletProviderInterface {
 

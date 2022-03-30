@@ -1,6 +1,6 @@
 import { CHAIN_NETWORKS, NgxWeb3WalletProviderInterface } from "@ngx-web3/core";
 import { PublicKey, Connection, clusterApiUrl, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { fromUSDtoSOL, toLamports } from "..";
+import { fromUSDtoSOL, toLamports } from "../sdk-web3.utils";
 
 type PhantomEvent = "disconnect" | "connect" | "accountChanged";
 
