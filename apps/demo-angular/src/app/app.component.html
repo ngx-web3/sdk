@@ -26,8 +26,16 @@
   <h2>IPFS Storage</h2>
   <input #inputElement hidden="true" multiple="true" title="file" type="file" id="file" (change)="storeFile(inputElement)"/>
   <button type="button" (click)="inputElement.click()">select files</button>
+  <span *ngIf="storageResult"> CID result: {{storageResult}}</span>
   <hr/>
   <input #inputSearch type="text" title="search" placeholder="search with CID" /> 
-  <button type="button" (click)="findFile(inputSearch.value)">search</button>
+  <button #searchFileEl type="button" (click)="findFile(inputSearch)">search</button>
+  <ng-container *ngIf="findResult">
+    <h3>Found file:</h3>
+    <ng-container *ngFor="let file of findResult">
+      <p>url: <a href="{{file.ipfsFileNamePath}}" target="_blank">{{file.ipfsFileNamePath}}</a></p>
+      <img [src]="file.ipfsFileNamePath" alt="demo" />
+    </ng-container>
+  </ng-container>
 </div>
 
