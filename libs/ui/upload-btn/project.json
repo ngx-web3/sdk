@@ -1,0 +1,34 @@
+{
+  "root": "libs/ui/upload-btn",
+  "sourceRoot": "libs/ui/upload-btn/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ui/upload-btn",
+        "tsConfig": "libs/ui/upload-btn/tsconfig.lib.json",
+        "packageJson": "libs/ui/upload-btn/package.json",
+        "main": "libs/ui/upload-btn/src/index.ts",
+        "assets": ["libs/ui/upload-btn/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/upload-btn/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/upload-btn"],
+      "options": {
+        "jestConfig": "libs/ui/upload-btn/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

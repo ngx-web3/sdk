@@ -20,6 +20,7 @@
       "@ngx-web3/core": ["libs/core/src/index.ts"],
       "@ngx-web3/sdk": ["libs/sdk/src/index.ts"],
       "@ngx-web3/ui-payment-btn": ["libs/ui/payment-btn/src/index.ts"],
+      "@ngx-web3/ui-upload-btn": ["libs/ui/upload-btn/src/index.ts"],
       "assert": ["./node_modules/assert"],
       "crypto": ["./node_modules/crypto-browserify"],
       "http": ["./node_modules/stream-http"],

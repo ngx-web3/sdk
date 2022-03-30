@@ -6,6 +6,7 @@
     "demo-react": "apps/demo-react",
     "demo-web": "apps/demo-web",
     "sdk": "libs/sdk",
-    "ui-payment-btn": "libs/ui/payment-btn"
+    "ui-payment-btn": "libs/ui/payment-btn",
+    "ui-upload-btn": "libs/ui/upload-btn"
   }
 }
