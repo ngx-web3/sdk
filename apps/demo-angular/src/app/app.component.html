@@ -22,7 +22,7 @@
 </div>
 
 
-<div>
+<!-- <div>
   <h2>IPFS Storage</h2>
   <input #inputElement hidden="true" multiple="true" title="file" type="file" id="file" (change)="storeFile(inputElement)"/>
   <button type="button" (click)="inputElement.click()">select files</button>
@@ -37,5 +37,14 @@
       <img [src]="file.ipfsFileNamePath" alt="demo" />
     </ng-container>
   </ng-container>
-</div>
+</div> -->
 
+<div>
+  <h2>@ngx-web3/ui-upload-btn</h2>
+  <p>
+    Store files using IPFS protocole and Filecoin blockain
+  </p>
+  <ngxweb3-upload-btn [attr.token]="web3StorageToken">
+    upload files
+  </ngxweb3-upload-btn>
+</div>
