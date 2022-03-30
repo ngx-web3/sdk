@@ -15,6 +15,7 @@ export class AppComponent {
   displayQrCode = true;
   storageResult!: string;
   findResult!: NgxWeb3File[];
+  web3StorageToken = environment.web3Storage.token;
 
   async storeFile(input: HTMLInputElement) {
     // init selected storage provider

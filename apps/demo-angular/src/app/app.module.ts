@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import  '@ngx-web3/ui-payment-btn';
+import '@ngx-web3/ui-upload-btn';
 
 @NgModule({
   declarations: [AppComponent],
