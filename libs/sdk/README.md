@@ -1,11 +1,9 @@
-# sdk
+<center>
+<h1>@ngx-web3/sdk</h1>
 
-This library was generated with [Nx](https://nx.dev).
+> Typescript utilities for Web3 developpement
+</center>
 
-## Building
 
-Run `nx build sdk` to build the library.
-
-## Running unit tests
-
-Run `nx test sdk` to execute the unit tests via [Jest](https://jestjs.io).
+## 👀 Overview
+This free opensource package provides a collection of Typescript utilities for Web3 developpement. You can use it to easily create your Web3 application and interact with  blockchain.

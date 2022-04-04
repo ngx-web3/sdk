@@ -14,6 +14,7 @@ NgxWeb3 provide a collection of packages to simplify development of your dapps i
 
 | **packages**      |  Description  | Preview |
 |--------------|----|----|
+| [@ngx-web3/sdk](./libs/sdk/README.md)      | SDK - Web3 utilities for web3 developpement |  |
 | [@ngx-web3/ui-payment-btn](./libs/ui/payment-btn/README.md)      | Web Component - Crypto Payment Button for Web3 Applications | <a href="https://crypto-payment-btn.web.app/" target="_blank">Live Demo</a> |
 | [@ngx-web3/ui-upload-btn](./libs/ui/upload-btn/README.md)      | Web Component - Upload Files Button for Web3 Applications |  |
 
