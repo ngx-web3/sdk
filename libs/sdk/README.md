@@ -7,3 +7,7 @@
 
 ## 👀 Overview
 This free opensource package provides a collection of Typescript utilities for Web3 developpement. You can use it to easily create your Web3 application and interact with  blockchain.
+
+## ⚙️ Install
+
+- Run `npm install @ngx-web3/sdk`
