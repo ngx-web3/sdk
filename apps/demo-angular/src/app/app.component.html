@@ -44,7 +44,9 @@
   <p>
     Store files using IPFS protocole and Filecoin blockain
   </p>
-  <ngxweb3-upload-btn [attr.token]="web3StorageToken">
+  <ngxweb3-upload-btn 
+      [attr.token]="web3StorageToken"
+      provider="filcoin">
     upload files
   </ngxweb3-upload-btn>
 </div>

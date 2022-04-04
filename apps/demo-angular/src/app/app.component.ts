@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgxWeb3File } from '@ngx-web3/core';
-import { StorageService, Web3StorageProvider } from '@ngx-web3/sdk';
+import { StorageService, Web3StorageProvider, StorjStorageProvider } from '@ngx-web3/sdk';
 import { environment } from '../environments/environment';
 
 @Component({
