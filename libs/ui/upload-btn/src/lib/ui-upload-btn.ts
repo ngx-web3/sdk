@@ -1,12 +1,21 @@
-import { StorageService, Web3StorageProvider} from '@ngx-web3/sdk';
+import { NgxWeb3File, NgxWeb3StorageProviderInterface } from '@ngx-web3/core';
+import { StorageService, StorjStorageProvider, Web3StorageProvider} from '@ngx-web3/sdk';
 import { defineCustomElement as defineIonSpinner } from '@ionic/core/components/ion-spinner';
 import { initialize as initIonicUIElements } from '@ionic/core';
-import { NgxWeb3File } from '@ngx-web3/core';
 
+const STORAGE_PROVIDER_TYPE = ['filcoin', 'ipfs', 'storj'];
 export class NgxWeb3UiUploadButton extends HTMLElement {
 
   public token!: string;
-  public static observedAttributes = ['token'];
+  public providerType!:  'filcoin' | 'ipfs' | 'storj' | string;
+  // optionnal attributes
+  public bucket?: string;
+  public accesskey?: string;
+  public secretkey?: string;
+  public endpoint?: string;
+
+  // static observed Attributes  
+  public static observedAttributes = ['token', 'provider', 'bucket', 'accesskey', 'secretkey', 'endpoint'];
 
   constructor() {
       super();
@@ -37,6 +46,21 @@ export class NgxWeb3UiUploadButton extends HTMLElement {
     // set correct value to the property
     if (name === 'token') {
       this.token = value;
+    }
+    if (name === 'provider' && STORAGE_PROVIDER_TYPE.includes(value) ) {
+      this.providerType = value
+    }
+    if (name === 'bucket') {
+      this.bucket = value;
+    }
+    if (name === 'accesskey') {
+      this.accesskey = value;
+    }
+    if (name === 'secretkey') {
+      this.secretkey = value;
+    }
+    if (name === 'endpoint') {
+      this.endpoint = value;
     }
   }
 
@@ -109,7 +133,7 @@ export class NgxWeb3UiUploadButton extends HTMLElement {
           btn.disabled = true;
         }
         // init service
-        const provider = new Web3StorageProvider(this.token||'');
+        const provider = await this._getStorageProvider();
         const storage = new StorageService(provider);
         // upload files
         const cid = await storage.save(Array.from(files));
@@ -135,6 +159,33 @@ export class NgxWeb3UiUploadButton extends HTMLElement {
     if (el) {
       el.innerHTML = files.map(f => `<a href="${f.ipfsFileNamePath}">${f.ipfsFileNamePath}</a>`).join('<br>');
       el.style.display = 'block';
+    }
+  }
+
+  private async _getStorageProvider(): Promise<NgxWeb3StorageProviderInterface> {
+    if (!this.providerType) {
+      throw new Error('[ERROR] provider type is not defined');
+    }
+    switch (this.providerType) {
+      case 'filcoin':
+        if (!this.token) {
+          throw new Error('[ERROR] Missing token attribute');
+        }
+        return new Web3StorageProvider(this.token||'');
+      case 'storj':
+        if (!this.bucket || !this.accesskey || !this.secretkey || !this.endpoint) {
+          console.log(this.bucket, this.accesskey, this.secretkey, this.endpoint);
+          
+          throw new Error('[ERROR] Missing bucket, accessKeyId, secretAccessKey or endpoint attributes');
+        }
+        return new StorjStorageProvider({
+          bucket: this.bucket,
+          accessKeyId: this.accesskey,
+          secretAccessKey: this.secretkey,
+          endpoint: this.endpoint,
+        });
+      default:
+        throw new Error('[ERROR] provider type is not supported');
     }
   }
 }
