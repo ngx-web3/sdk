@@ -1,4 +1,8 @@
 {
   "name": "@ngx-web3/ui-upload-btn",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "@ngx-web3/sdk": "latest",
+    "@ionic/core": "latest"
+  }
 }
