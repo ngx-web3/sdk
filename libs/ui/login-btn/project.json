@@ -1,0 +1,34 @@
+{
+  "root": "libs/ui/login-btn",
+  "sourceRoot": "libs/ui/login-btn/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ui/login-btn",
+        "tsConfig": "libs/ui/login-btn/tsconfig.lib.json",
+        "packageJson": "libs/ui/login-btn/package.json",
+        "main": "libs/ui/login-btn/src/index.ts",
+        "assets": ["libs/ui/login-btn/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/login-btn/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/login-btn"],
+      "options": {
+        "jestConfig": "libs/ui/login-btn/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

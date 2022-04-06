@@ -12,6 +12,9 @@ export const environment = {
     secretAccessKey: '',
     endpoint: '',
     bucket: ''
+  },
+  walletconnect: {
+    projectid: ''
   }
 };
 

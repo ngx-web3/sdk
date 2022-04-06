@@ -1,0 +1,15 @@
+{
+  "name": "@ngx-web3/ui-login-btn",
+  "version": "0.0.1-beta.1",
+  "type": "module",
+  "dependencies": {
+    "@ngx-web3/sdk": "latest",
+    "@ionic/core": "latest",
+    "buffer": "6.0.3",
+    "qrcode": "^1.1.0",
+    "@walletconnect/client": "^2.0.0-beta.26",
+    "@walletconnect/qrcode-modal": "^1.7.7",
+    "@walletconnect/types": "^2.0.0-beta.26",
+    "@walletconnect/web3-provider": "^1.7.7"
+  }
+}
