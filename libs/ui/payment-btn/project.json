@@ -4,9 +4,12 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:package",
+      "executor": "@nrwl/web:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "project": "libs/ui/payment-btn/package.json",
+        "entryFile": "libs/ui/payment-btn/src/index.ts",
+        "format": ["cjs", "esm", "umd"],
         "buildableProjectDepsInPackageJsonType": "peerDependencies",
         "outputPath": "dist/libs/ui-payment-btn",
         "main": "libs/ui/payment-btn/src/index.ts",
@@ -14,7 +17,6 @@
         "packageJson": "libs/ui/payment-btn/package.json",
         "tsConfig": "libs/ui/payment-btn/tsconfig.lib.json",
         "assets": [
-          "libs/ui/payment-btn/*.md",
           {
             "input": "libs/ui/payment-btn/src/assets",
             "glob": "**/*",

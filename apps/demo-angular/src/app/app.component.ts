@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   title = 'demo-angular';
   amount = 250;
   symbol = 'BNB';
-  displayQrCode = true;
+  displayQrCode = !true;
   storageResult!: string;
   findResult!: NgxWeb3File[];
   web3StorageToken = environment.web3Storage.token;

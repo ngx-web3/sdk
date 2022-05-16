@@ -4,7 +4,7 @@ import { defineCustomElement as defineIonButton} from '@ionic/core/components/io
 import { defineCustomElement as defineIonItem} from '@ionic/core/components/ion-item';
 import { defineCustomElement as defineIonLabel} from '@ionic/core/components/ion-label';
 import { defineCustomElement as defineIonSkeleton} from '@ionic/core/components/ion-skeleton-text';
-import { initialize } from "@ionic/core/components";
+import { initialize as initIonicComponents } from "@ionic/core/components";
 import { defineCustomElement as defineIonIcon } from 'ionicons/components/ion-icon';
 import { logoBitcoin, closeCircle } from 'ionicons/icons';
 import { addIcons } from 'ionicons/components';
@@ -21,6 +21,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
   protected _chainid?: number;
   protected _to!: string;
   protected _displayQrCode = true;
+  protected _displayIcon = false;
   protected _displayError!: boolean;
   protected _isStyleDisabled!: boolean;
   private _web3Service!: WalletService;
@@ -48,13 +49,16 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     addIcons({'logo-dot': SVG.DOT});
     addIcons({'close-circle': closeCircle});
     addIcons({'logo-bitcoin': logoBitcoin});
-    initialize();
+    initIonicComponents();
+    
   }
   
   connectedCallback() {
     console.log('[INFO] Appended and connected to document');
     this.innerHTML = `
-      <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+      <div class="ngx-ui-container">
+        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+      </div>
     `;
   }
 
@@ -87,6 +91,11 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
           ? true
           : false;
       }
+      else if (name === 'display-icon') {
+        this._displayIcon = value === 'true'
+          ? true
+          : false;
+      }
       // and for others
       else {
         (this as any)['_' + name] = value;
@@ -97,7 +106,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
       if (name === 'symbol' || (name === 'chainid' && this._symbol)) {
         const isChainChange =  !this._web3Service && old === null ? false : true;
         this._initComponent(isChainChange)
-            .then((res) =>  (this.render(), this._addStyle()))
+            .then(() =>  (this.render(), this._addStyle()))
             .catch(err => {
               // clean DOM
               this.innerHTML = ``;
@@ -165,7 +174,7 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     }
     let btn = (this._selectedCryptoCurrency)
       ? `<ion-button>
-          <ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>
+          ${this._displayIcon ? `<ion-icon slot="start" name="logo-${this.iconName}"></ion-icon>`: ''}
           ${this.buttonText}
         </ion-button>`
       : ``;
@@ -181,16 +190,25 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
         : `
           <br/>
           <p>
-            ${this.buttonText} by scanning this qrcode with your mobile wallet
+            ${this.buttonText} ${this._displayQrCode ? `by scanning this qrcode with your mobile wallet`: ''}
           </p>
         `
     }
-    // update the UI
-    this.innerHTML = `
-      <div class="ngx-ui-container">${qrCode + btn}</div>
-    `;
-    if (this._selectedCryptoCurrency) {
-      this._addEvents();
+    // update the UI if no Error
+    const errorElementHTML = this.querySelector('#ngxweb3-error');
+    const el = this.querySelector('.ngx-ui-container');
+    if (errorElementHTML) {
+      (el as any).innerHTML = '';
+    } else {
+      if (!el) {
+        throw new Error('[ERROR] No container found');
+      }
+      el.innerHTML = `
+        ${qrCode + btn}
+      `;
+      if (this._selectedCryptoCurrency) {
+        this._addEvents();
+      }
     }
     // add style
     this._addStyle();
@@ -286,8 +304,8 @@ export class NgxWeb3UiPaymentButton extends HTMLElement {
     let elementHTML = this.querySelector('#ngxweb3-error');
     // if not found, create it
     if (!elementHTML) {
-      const el = this.querySelector('.ngx-ui-container:first-child');
-      el?.insertAdjacentHTML('afterend', `<div id="ngxweb3-error"></div>`);
+      const el = this.querySelector('.ngx-ui-container');
+      el?.insertAdjacentHTML('beforebegin', `<div id="ngxweb3-error"></div>`);
       elementHTML = this.querySelector('#ngxweb3-error');
     }
     // display error 
